@@ -217,6 +217,8 @@ else:
                 add_new_Batch(st.session_state.username, Product_Name, Batch_No, QTY_pack, Date, Delivered_by, Received_by, Remark)
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
+            csv = df_Receving.to_csv(index=False)
+            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
         
     
         if __name__ == '__main__':
@@ -255,6 +257,8 @@ else:
                 add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
                 st.write('## Updated Items')
                 st.dataframe(df_BIN)
+            csv = df_BIN.to_csv(index=False)
+            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
         
     
         if __name__ == '__main__':
