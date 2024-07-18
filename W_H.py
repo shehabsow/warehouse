@@ -203,7 +203,7 @@ else:
                 Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                 Warehouse_Operator = st.text_input('Warehouse Operator:')
             with col2:
-                Batch_No = st.text_input('Batch_No:')
+                Batch_No = st.text_input('Batch No:')
                 Date = st.date_input('Date:')
             with col3:
                 QTY_pack = st.text_input('QTY pack:')
