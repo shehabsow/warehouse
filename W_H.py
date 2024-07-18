@@ -121,10 +121,10 @@ def add_new_Batch(username, Product_Name, Batch_No, QTY_pack, Date, Delivered_by
     log_entry = {
         'user': username,
         'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-        'Batch No': Batch_No,
-        'QTY pack': QTY_pack,
-        'Delivered by': Delivered_by,
-        'Received by': Received_by,
+        'Batch_No': Batch_No,
+        'QTY_pack': QTY_pack,
+        'Delivered_by': Delivered_by,
+        'Received_by': Received_by,
         'Remark': Remark
     }
     st.session_state.logs_receving.append(log_entry)
