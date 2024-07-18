@@ -10,18 +10,7 @@ st.set_page_config(
     page_title='Earthquake analysis',
     page_icon='🪙')
 
-header = ['Product Name', 'Item Code', 'Batch Number', 'Quantity','Date','BIN1','QTY1','BIN2','QTY2','BIN3','QTY3']
-with open('LOCATION.csv', 'w', encoding='UTF8', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(header)
-    df_BIN = pd.read_csv('LOCATION.csv')
 
-
-header = ['Product Name', 'Batch Number', 'QTY/pack','Date','Delivered by','Received by', 'Remark']
-with open('Receving.csv', 'w', encoding='UTF8', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(header)
-    df_Receving = pd.read_csv('Receving.csv')
 
 egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
