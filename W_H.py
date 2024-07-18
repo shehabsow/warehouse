@@ -222,7 +222,7 @@ else:
                 Batch_No = st.text_input('Batch_No:')
                 Date = st.date_input('Date:')
             with col3:
-                QTY_pack = st.text_input('QTY_pack:')
+                QTY_pack = st.text_input('QTY pack:')
             with col4:
                 Delivered_by = st.text_input('Delivered by:')
             with col5:
