@@ -8,7 +8,7 @@ import json
 egypt_tz = pytz.timezone('Africa/Cairo')
 
 # Load initial data
-#df_Material = pd.read_excel('New Microsoft Excel Worksheet.xlsx')
+df_Material = pd.read_csv('New Microsoft Excel Worksheet.csv')
 df_BIN = pd.read_csv('LOCATION.csv')
 df_Receving = pd.read_csv('Receving.csv')
 
