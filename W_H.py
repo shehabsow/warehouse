@@ -220,6 +220,12 @@ else:
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
             csv = df_Receving.to_csv(index=False)
+
+            st.markdown("""
+                    <h2 style='text-align: center; font-size: 40px; color: black;'>
+                        Warehouse Management System
+                    </h2>
+                """, unsafe_allow_html=True)
             
             def calculate_packaging(total_boxes):
                 boxes_per_carton = 240
