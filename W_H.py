@@ -108,30 +108,6 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
     logs_df = pd.DataFrame(st.session_state.logs_location)
     logs_df.to_csv('logs_location.csv', index=False)
 
-def calculate_packaging(Quantity):
-    boxes_per_carton = 240
-    cartons_per_pallet = 12
-    
-    total_cartons = total_boxes // boxes_per_carton
-    remaining_boxes = total_boxes % boxes_per_carton
-    
-    total_pallets = total_cartons // cartons_per_pallet
-    remaining_cartons = total_cartons % cartons_per_pallet
-    
-    return total_pallets, remaining_cartons, remaining_boxes
-
-# Streamlit app code
-
-
-# Input quantity from the user
-Quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
-
-# Calculate packaging when a valid quantity is entered
-if Quantity > 0:
-    pallets, cartons, boxes = calculate_packaging(Quantity)
-    st.write(f"Total Pallets: {pallets}")
-    st.write(f"Remaining Cartons: {cartons}")
-    st.write(f"Remaining Boxes: {boxes}")
 
 # Function to add new batch
 def add_new_Batch(username, Product_Name, Batch_No, QTY_pack, Date, Delivered_by, Received_by, Remark):
@@ -244,9 +220,33 @@ else:
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
             csv = df_Receving.to_csv(index=False)
-            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
-        
-    
+            def calculate_packaging(Quantity):
+                boxes_per_carton = 240
+                cartons_per_pallet = 12
+                
+                total_cartons = total_boxes // boxes_per_carton
+                remaining_boxes = total_boxes % boxes_per_carton
+                
+                total_pallets = total_cartons // cartons_per_pallet
+                remaining_cartons = total_cartons % cartons_per_pallet
+                
+                return total_pallets, remaining_cartons, remaining_boxes
+            
+            # Streamlit app code
+            
+            
+            # Input quantity from the user
+            Quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
+            
+            # Calculate packaging when a valid quantity is entered
+            if Quantity > 0:
+                pallets, cartons, boxes = calculate_packaging(Quantity)
+                st.write(f"Total Pallets: {pallets}")
+                st.write(f"Remaining Cartons: {cartons}")
+                st.write(f"Remaining Boxes: {boxes}")
+                        st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+                    
+                
         if __name__ == '__main__':
             main()
     
