@@ -108,7 +108,7 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
     logs_df = pd.DataFrame(st.session_state.logs_location)
     logs_df.to_csv('logs_location.csv', index=False)
 
-    def calculate_packaging(total_boxes):
+    def calculate_packaging(Quantity):
         boxes_per_carton = 240
         cartons_per_pallet = 12
         
@@ -127,8 +127,8 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
     quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
     
     # Calculate packaging when a valid quantity is entered
-    if quantity > 0:
-        pallets, cartons, boxes = calculate_packaging(quantity)
+    if Quantity > 0:
+        pallets, cartons, boxes = calculate_packaging(Quantity)
         st.write(f"Total Pallets: {pallets}")
         st.write(f"Remaining Cartons: {cartons}")
         st.write(f"Remaining Boxes: {boxes}")
