@@ -244,7 +244,7 @@ else:
                 st.write(f"Total Pallets: {pallets}")
                 st.write(f"Remaining Cartons: {cartons}")
                 st.write(f"Remaining Boxes: {boxes}")
-                        st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
                     
                 
         if __name__ == '__main__':
