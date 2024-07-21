@@ -220,7 +220,8 @@ else:
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
             csv = df_Receving.to_csv(index=False)
-            def calculate_packaging(Quantity):
+            
+            def calculate_packaging(total_boxes):
                 boxes_per_carton = 240
                 cartons_per_pallet = 12
                 
@@ -236,11 +237,11 @@ else:
             
             
             # Input quantity from the user
-            Quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
+            quantity  = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
             
             # Calculate packaging when a valid quantity is entered
-            if Quantity > 0:
-                pallets, cartons, boxes = calculate_packaging(Quantity)
+            if quantity  > 0:
+                pallets, cartons, boxes = calculate_packaging(quantity )
                 st.write(f"Total Pallets: {pallets}")
                 st.write(f"Remaining Cartons: {cartons}")
                 st.write(f"Remaining Boxes: {boxes}")
