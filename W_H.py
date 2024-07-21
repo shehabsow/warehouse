@@ -226,32 +226,33 @@ else:
                         Warehouse Management System
                     </h2>
                 """, unsafe_allow_html=True)
-            
-            def calculate_packaging(total_boxes):
-                boxes_per_carton = 240
-                cartons_per_pallet = 12
+            col1, col2,col3 = st.columns([2,2,2])
+            with col2:
+                def calculate_packaging(total_boxes):
+                    boxes_per_carton = 240
+                    cartons_per_pallet = 12
+                    
+                    total_cartons = total_boxes // boxes_per_carton
+                    remaining_boxes = total_boxes % boxes_per_carton
+                    
+                    total_pallets = total_cartons // cartons_per_pallet
+                    remaining_cartons = total_cartons % cartons_per_pallet
+                    
+                    return total_pallets, remaining_cartons, remaining_boxes
                 
-                total_cartons = total_boxes // boxes_per_carton
-                remaining_boxes = total_boxes % boxes_per_carton
+                # Streamlit app code
                 
-                total_pallets = total_cartons // cartons_per_pallet
-                remaining_cartons = total_cartons % cartons_per_pallet
                 
-                return total_pallets, remaining_cartons, remaining_boxes
-            
-            # Streamlit app code
-            
-            
-            # Input quantity from the user
-            quantity  = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
-            
-            # Calculate packaging when a valid quantity is entered
-            if quantity  > 0:
-                pallets, cartons, boxes = calculate_packaging(quantity )
-                st.write(f"Total Pallets: {pallets}")
-                st.write(f"Remaining Cartons: {cartons}")
-                st.write(f"Remaining Boxes: {boxes}")
-            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+                # Input quantity from the user
+                quantity  = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
+                
+                # Calculate packaging when a valid quantity is entered
+                if quantity  > 0:
+                    pallets, cartons, boxes = calculate_packaging(quantity )
+                    st.write(f"Total Pallets: {pallets}")
+                    st.write(f"Remaining Cartons: {cartons}")
+                    st.write(f"Remaining Boxes: {boxes}")
+                st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
                     
                 
         if __name__ == '__main__':
