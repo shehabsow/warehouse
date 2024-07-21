@@ -7,7 +7,7 @@ import csv
 
 st.set_page_config(
     layout="wide",
-    page_title='Earthquake analysis',
+    page_title='warehouse',
     page_icon='🪙')
 
 
