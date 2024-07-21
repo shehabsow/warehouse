@@ -124,7 +124,7 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
     
     
     # Input quantity from the user
-    quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
+    Quantity = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
     
     # Calculate packaging when a valid quantity is entered
     if Quantity > 0:
