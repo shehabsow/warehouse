@@ -110,10 +110,10 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
 
 
 # Function to add new batch
-def add_new_Batch(username, Product_Name, Batch_No, QTY_pack, Date, Delivered_by, Received_by, Remark):
+def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark):
     global df_Receving
     new_row = {
-        'Product Name': Product_Name, 'Batch No': Batch_No, 'QTY pack': QTY_pack,
+        'Product Name': Product_Name, 'Batch No': Batch_No, , 'Item Code':Item_Code, 'QTY pack': QTY_pack,
         'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark
     }
     df_Receving = df_Receving.append(new_row, ignore_index=True)
@@ -173,7 +173,7 @@ else:
     try:
         df_Receving = pd.read_csv('Receving.csv')
     except FileNotFoundError:
-        df_Receving = pd.DataFrame(columns=['Product Name', "Batch No", "QTY pack", "Date", "Delivered by", "Received by", "Remark"])
+        df_Receving = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by", "Remark"])
     
     try:
         logs_df = pd.read_csv('logs_location.csv')
@@ -202,7 +202,7 @@ else:
             col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
             with col1:
                 Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                Warehouse_Operator = st.text_input('Warehouse Operator:')
+                Item_Code= st.selectbox('Item Code', df_Material['Material'].dropna().values)
             with col2:
                 Batch_No = st.text_input('Batch No:')
                 Date = st.date_input('Date:')
