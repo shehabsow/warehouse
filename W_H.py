@@ -143,6 +143,10 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     logs_df = pd.DataFrame(st.session_state.logs_receving)
     logs_df.to_csv('logs_receving.csv', index=False)
 
+# Handle quantity change
+def on_quantity_change():
+    st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(int(st.session_state['QTY_pack']))
+
 users = load_users()
 
 if 'logged_in' not in st.session_state:
@@ -169,16 +173,27 @@ else:
                 else:
                     update_password(st.session_state.username, new_password, confirm_new_password)
     else:
-        st.markdown(f"<div style='text-align: right; font-size: 20px; color: green;'> Login by : {users[st.session_state.username]['name']}</div>", unsafe_allow_html=True)
-
-        # Load data frames
-        if 'df' not in st.session_state:
-            st.session_state.df = df_Material = pd.read_csv('matril.csv')
+        st.markdown(f"<div style='text```python
+-align: right; font-size: 20px; color: black;'>User: {st.session_state.username}</div>", unsafe_allow_html=True)
+        if st.session_state.password_expired:
+            st.warning("Your password has expired. Please update your password.")
+            col1, col2, col3 = st.columns([1, 1, 1])
+            with col2:
+                st.subheader("Change Password")
+                new_password = st.text_input("New Password", type="password")
+                confirm_new_password = st.text_input("Confirm Password", type="password")
+                if st.button("Update Password"):
+                    if not new_password or not confirm_new_password:
+                        st.error("Please fill in all the fields.")
+                    else:
+                        update_password(st.session_state.username, new_password, confirm_new_password)
+        else:
+            # Load data
+            df_Material = pd.read_csv('matril.csv')
             try:
                 df_BIN = pd.read_csv('LOCATION.csv')
             except FileNotFoundError:
-                df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator",
-                                               'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
+                df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator", 'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
             try:
                 df_Receving = pd.read_csv('Receving.csv')
             except FileNotFoundError:
@@ -193,79 +208,84 @@ else:
                 st.session_state.logs_receving = logs_df.to_dict('records')
             except FileNotFoundError:
                 st.session_state.logs_receving = []
-            
-        # Display options
-        page = st.sidebar.radio("Select page", ["Add New Batch", "Add New Location", "Logs"])
-        
-        if page == 'Add New Batch':
-            def main():
-                col1, col2 = st.columns([2, 0.75])
-                with col1:
-                    st.markdown("""
-                        <h2 style='text-align: center; font-size: 40px; color: black;'>
-                            Add New Batch
-                        </h2>
-                    """, unsafe_allow_html=True)
-                col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
-                with col1:
-                    Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    st.text(f"Item Code: {Item_Code}")
-                with col2:
-                    Batch_No = st.text_input('Batch No:')
-                    Date = st.date_input('Date:')
-                with col3:
-                    QTY_pack = st.text_input('QTY pack:')
-                with col4:
-                    Delivered_by = st.text_input('Delivered by:')
-                with col5:
-                    Received_by = st.text_input('Received by:')
-                with col6:
-                    Remark = st.text_input('Remark:')
 
-                if st.button("Add Batch"):
-                    add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark)
-            
-            main()
+            # Display options
+            page = st.sidebar.radio("Select page", ["Add New Batch", "Add New Location", "Logs"])
 
-        elif page == 'Add New Location':
-            def main():
-                col1, col2 = st.columns([2, 0.75])
-                with col1:
-                    st.markdown("""
-                        <h2 style='text-align: center; font-size: 40px; color: black;'>
-                            Add New Location
-                        </h2>
-                    """, unsafe_allow_html=True)
-                col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
-                with col1:
-                    Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    st.text(f"Item Code: {Item_Code}")
-                with col2:
-                    Batch_Number = st.text_input('Batch Number:')
-                    Date = st.date_input('Date:')
-                with col3:
-                    Warehouse_Operator = st.text_input('Warehouse Operator:')
-                with col4:
-                    Quantity = st.text_input('Quantity:')
-                with col5:
-                    BIN1 = st.text_input('BIN1:')
-                    QTY1 = st.text_input('QTY1:')
-                with col6:
-                    BIN2 = st.text_input('BIN2:')
-                    QTY2 = st.text_input('QTY2:')
-                    BIN3 = st.text_input('BIN3:')
-                    QTY3 = st.text_input('QTY3:')
+            if page == 'Add New Batch':
+                def main():
+                    col1, col2 = st.columns([2, 0.75])
+                    with col1:
+                        st.markdown("""
+                            <h2 style='text-align: center; font-size: 40px; color: black;'>
+                                Add New Batch
+                            </h2>
+                        """, unsafe_allow_html=True)
+                    col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+                    with col1:
+                        Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                        Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                        st.text(f"Item Code: {Item_Code}")
+                    with col2:
+                        Batch_No = st.text_input('Batch No:')
+                        Date = st.date_input('Date:')
+                    with col3:
+                        QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
+                    with col4:
+                        Delivered_by = st.text_input('Delivered by:')
+                    with col5:
+                        Received_by = st.text_input('Received by:')
+                    with col6:
+                        Remark = st.text_input('Remark:')
+                    
+                    # Display packaging results
+                    st.text(f"Pallets: {st.session_state.get('pallets', '')}")
+                    st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
+                    st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
 
-                if st.button("Add Location"):
-                    add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
-            
-            main()
+                    if st.button("Add Batch"):
+                        add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark)
+                
+                main()
 
-        elif page == 'Logs':
-            st.markdown("<h2 style='text-align: center; font-size: 40px; color: black;'>Logs</h2>", unsafe_allow_html=True)
-            st.markdown("### Location Logs")
-            st.dataframe(pd.DataFrame(st.session_state.logs_location))
-            st.markdown("### Receiving Logs")
-            st.dataframe(pd.DataFrame(st.session_state.logs_receving))
+            elif page == 'Add New Location':
+                def main():
+                    col1, col2 = st.columns([2, 0.75])
+                    with col1:
+                        st.markdown("""
+                            <h2 style='text-align: center; font-size: 40px; color: black;'>
+                                Add New Location
+                            </h2>
+                        """, unsafe_allow_html=True)
+                    col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+                    with col1:
+                        Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                        Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                        st.text(f"Item Code: {Item_Code}")
+                    with col2:
+                        Batch_Number = st.text_input('Batch Number:')
+                        Date = st.date_input('Date:')
+                    with col3:
+                        Warehouse_Operator = st.text_input('Warehouse Operator:')
+                    with col4:
+                        Quantity = st.text_input('Quantity:')
+                    with col5:
+                        BIN1 = st.text_input('BIN1:')
+                        QTY1 = st.text_input('QTY1:')
+                    with col6:
+                        BIN2 = st.text_input('BIN2:')
+                        QTY2 = st.text_input('QTY2:')
+                        BIN3 = st.text_input('BIN3:')
+                        QTY3 = st.text_input('QTY3:')
+
+                    if st.button("Add Location"):
+                        add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                
+                main()
+
+            elif page == 'Logs':
+                st.markdown("<h2 style='text-align: center; font-size: 40px; color: black;'>Logs</h2>", unsafe_allow_html=True)
+                st.markdown("### Location Logs")
+                st.dataframe(pd.DataFrame(st.session_state.logs_location))
+                st.markdown("### Receiving Logs")
+                st.dataframe(pd.DataFrame(st.session_state.logs_receving))
