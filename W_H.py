@@ -164,7 +164,11 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
 
 # Handle quantity change
 def on_quantity_change():
-    st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(int(st.session_state['QTY_pack']))
+    try:
+        qty_pack = int(st.session_state['QTY_pack'])
+        st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(qty_pack)
+    except ValueError:
+        st.error("Please enter a valid number for QTY pack.")
 
 users = load_users()
 
