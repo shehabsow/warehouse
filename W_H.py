@@ -82,7 +82,20 @@ def update_password(username, new_password, confirm_new_password):
         st.error("Passwords do not match!")
 
 # Function to add new location
-def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
+def update_password(username, new_password, confirm_new_password):
+    if new_password == confirm_new_password:
+        users[username]["password"] = new_password
+        users[username]["first_login"] = False
+        users[username]["last_password_update"] = str(datetime.now(egypt_tz))
+        save_users(users)
+        st.session_state.first_login = False
+        st.session_state.password_expired = False
+        st.success("Password updated successfully!")
+    else:
+        st.error("Passwords do not match!")
+
+# Function to add new location
+def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
     global df_BIN
     new_row = {
         'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
@@ -108,13 +121,27 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
     logs_df = pd.DataFrame(st.session_state.logs_location)
     logs_df.to_csv('logs_location.csv', index=False)
 
+# Function to calculate packaging
+def calculate_packaging(total_boxes):
+    cartons_per_pallet = 12
+    boxes_per_carton = 240
+
+    cartons = total_boxes // boxes_per_carton
+    boxes_left = total_boxes % boxes_per_carton
+
+    pallets = cartons // cartons_per_pallet
+    cartons_left = cartons % cartons_per_pallet
+
+    return pallets, cartons_left, boxes_left
 
 # Function to add new batch
 def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark):
     global df_Receving
+    pallets, cartons, boxes = calculate_packaging(int(QTY_pack))
     new_row = {
-        'Product Name': Product_Name, 'Batch No': Batch_No,  'Item Code':Item_Code, 'QTY pack': QTY_pack,
-        'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark
+        'Product Name': Product_Name, 'Batch No': Batch_No, 'Item Code': Item_Code, 'QTY pack': QTY_pack,
+        'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark,
+        'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_Receving = df_Receving.append(new_row, ignore_index=True)
     df_Receving.to_csv('Receving.csv', index=False)
@@ -124,6 +151,9 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
         'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
         'Batch No': Batch_No,
         'QTY pack': QTY_pack,
+        'Pallets': pallets,
+        'Cartons': cartons,
+        'Boxes': boxes,
         'Delivered by': Delivered_by,
         'Received by': Received_by,
         'Remark': Remark
@@ -132,6 +162,9 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     logs_df = pd.DataFrame(st.session_state.logs_receving)
     logs_df.to_csv('logs_receving.csv', index=False)
 
+# Handle quantity change
+def on_quantity_change():
+    st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(int(st.session_state['QTY_pack']))
 
 users = load_users()
 
@@ -191,6 +224,7 @@ else:
     page = st.sidebar.radio("Select page", [ "Add New Batch","Add New Location", "Logs"])
     
     if page == 'Add New Batch':
+        
         def main():
             col1, col2 = st.columns([2, 0.75])
             with col1:
@@ -202,59 +236,31 @@ else:
             col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
             with col1:
                 Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                Item_Code= st.selectbox('Item Code', df_Material['Material'].dropna().values)
+                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                st.text(f"Item Code: {Item_Code}")
             with col2:
                 Batch_No = st.text_input('Batch No:')
                 Date = st.date_input('Date:')
             with col3:
-                QTY_pack = st.text_input('QTY pack:')
+                QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
             with col4:
                 Delivered_by = st.text_input('Delivered by:')
             with col5:
                 Received_by = st.text_input('Received by:')
             with col6:
                 Remark = st.text_input('Remark:')
-    
+            
+            # Display packaging results
+            st.text(f"Pallets: {st.session_state.get('pallets', '')}")
+            st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
+            st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
+
             if st.button("Add Batch"):
-                add_new_Batch(st.session_state.username, Product_Name, Batch_No, QTY_pack, Date, Delivered_by, Received_by, Remark)
+                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark)
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
             csv = df_Receving.to_csv(index=False)
-
-            st.markdown("""
-                    <h2 style='text-align: center; font-size: 40px; color: black;'>
-                        Warehouse Management System
-                    </h2>
-                """, unsafe_allow_html=True)
-            col1, col2,col3 = st.columns([2,2,2])
-            with col2:
-                def calculate_packaging(total_boxes):
-                    boxes_per_carton = 240
-                    cartons_per_pallet = 12
-                    
-                    total_cartons = total_boxes // boxes_per_carton
-                    remaining_boxes = total_boxes % boxes_per_carton
-                    
-                    total_pallets = total_cartons // cartons_per_pallet
-                    remaining_cartons = total_cartons % cartons_per_pallet
-                    
-                    return total_pallets, remaining_cartons, remaining_boxes
-                
-                # Streamlit app code
-                
-                
-                # Input quantity from the user
-                quantity  = st.number_input("Enter the total number of boxes (Quantity):", min_value=0, step=1)
-                
-                # Calculate packaging when a valid quantity is entered
-                if quantity  > 0:
-                    pallets, cartons, boxes = calculate_packaging(quantity )
-                    st.write(f"Total Pallets: {pallets}")
-                    st.write(f"Remaining Cartons: {cartons}")
-                    st.write(f"Remaining Boxes: {boxes}")
-            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
-                    
-                
+                     
         if __name__ == '__main__':
             main()
     
@@ -268,27 +274,29 @@ else:
                         Add New Location
                     </h2>
                 """, unsafe_allow_html=True)
-            col1, col2, col3, col4, col5 = st.columns([2.5, 1.5, 1.5, 1.5, 1.5])
+            col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
             with col1:
                 Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                Item_Code = st.text_input('Item Code:')
-                Warehouse_Operator = st.text_input('Warehouse Operator:')
+                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                st.text(f"Item Code: {Item_Code}")
             with col2:
                 Batch_Number = st.text_input('Batch Number:')
-                Quantity = st.text_input('Quantity:')
                 Date = st.date_input('Date:')
             with col3:
-                BIN1 = st.text_input('BIN1:')
-                QTY1 = st.number_input('QTY1:',min_value=0)
+                Warehouse_Operator = st.text_input('Warehouse Operator:')
             with col4:
-                BIN2 = st.text_input('BIN2:')
-                QTY2 = st.number_input('QTY2:',min_value=0)
+                Quantity = st.text_input('Quantity:')
             with col5:
+                BIN1 = st.text_input('BIN1:')
+                QTY1 = st.text_input('QTY1:')
+            with col6:
+                BIN2 = st.text_input('BIN2:')
+                QTY2 = st.text_input('QTY2:')
                 BIN3 = st.text_input('BIN3:')
-                QTY3 = st.number_input('QTY3:',min_value=0)
+                QTY3 = st.text_input('QTY3:')
+
             if st.button("Add Location"):
-                row_index = len(df_BIN)
-                add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
                 st.write('## Updated Items')
                 st.dataframe(df_BIN)
             csv = df_BIN.to_csv(index=False)
