@@ -113,7 +113,7 @@ def add_new_LOCATION(row_index, Product_Name, Item_Code, Batch_Number, Warehouse
 def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark):
     global df_Receving
     new_row = {
-        'Product Name': Product_Name, 'Batch No': Batch_No, , 'Item Code':Item_Code, 'QTY pack': QTY_pack,
+        'Product Name': Product_Name, 'Batch No': Batch_No,  'Item Code':Item_Code, 'QTY pack': QTY_pack,
         'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark
     }
     df_Receving = df_Receving.append(new_row, ignore_index=True)
