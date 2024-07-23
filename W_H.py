@@ -269,7 +269,7 @@ else:
             main()
     
     
-    elif page == "Add New Location":
+    elif page == "FINISHED GOODS BIN LOCATION SHEET":
         def main():
             col1, col2 = st.columns([2, 0.75])
             with col1:
