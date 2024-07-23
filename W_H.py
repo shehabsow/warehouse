@@ -225,7 +225,7 @@ else:
         st.session_state.logs_receving = []
     
     # Display options
-    page = st.sidebar.radio("Select page", [ "Add New Batch","Add New Location", "Logs"])
+    page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs"])
     
     if page == 'Add New Batch':
         
@@ -275,7 +275,7 @@ else:
             with col1:
                 st.markdown("""
                     <h2 style='text-align: center; font-size: 40px; color: black;'>
-                        Add New Location
+                        FINISHED GOODS BIN LOCATION SHEET
                     </h2>
                 """, unsafe_allow_html=True)
             col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
