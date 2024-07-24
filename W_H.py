@@ -317,19 +317,19 @@ else:
             main()
     
     elif page == "Logs":
+        def clear_logs(log_type):
+            if log_type == "receiving":
+                st.session_state.logs_receving = []
+                if os.path.exists('user_logs_receving.csv'):
+                    os.remove('user_logs_receving.csv')
+                st.success("Receiving logs cleared successfully!")
+            elif log_type == "location":
+                st.session_state.logs_location = []
+                if os.path.exists('location_logs.csv'):
+                    os.remove('location_logs.csv')
+                st.success("Location logs cleared successfully!")
+
         def main():
-            def clear_logs(log_type):
-                if log_type == "receiving":
-                    st.session_state.logs_receving = []
-                    if os.path.exists('user_logs_receving.csv'):
-                        os.remove('user_logs_receving.csv')
-                    st.success("Receiving logs cleared successfully!")
-                elif log_type == "location":
-                    st.session_state.logs_location = []
-                    if os.path.exists('location_logs.csv'):
-                        os.remove('location_logs.csv')
-                    st.success("Location logs cleared successfully!")
-            
             col1, col2 = st.columns([2, 0.75])
             with col1:
                 st.markdown("""
@@ -337,19 +337,20 @@ else:
                         View Logs
                     </h2>
                 """, unsafe_allow_html=True)
-            st.subheader("receving Logs")
-            if st.session_state.logs_receving:
+            
+            st.subheader("Receiving Logs")
+            if st.session_state.get('logs_receving', []):
                 logs_df = pd.DataFrame(st.session_state.logs_receving)
                 st.dataframe(logs_df)
                 csv = logs_df.to_csv(index=False)
-                st.download_button(label="Download Logs as sheet", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
+                st.download_button(label="Download Logs as CSV", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
                 if st.button("Clear Receiving Logs"):
                     clear_logs("receiving")
             else:
-                st.write("No receving logs available.")
-    
+                st.write("No receiving logs available.")
+            
             st.subheader("Location Logs")
-            if st.session_state.logs_location:
+            if st.session_state.get('logs_location', []):
                 logs_df = pd.DataFrame(st.session_state.logs_location)
                 st.dataframe(logs_df)
                 csv = logs_df.to_csv(index=False)
@@ -358,8 +359,8 @@ else:
                     clear_logs("location")
             else:
                 st.write("No location logs available.")
-
+        
         if __name__ == '__main__':
             main()
-
-
+        
+        
