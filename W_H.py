@@ -347,7 +347,7 @@ else:
             if st.button('Clear Logs'):
                 st.session_state.logs = []
                 try:
-                    os.remove('logs.csv')
+                    os.remove('logs_df.csv')
                 except FileNotFoundError:
                     pass
                 st.success("Logs cleared successfully!")
