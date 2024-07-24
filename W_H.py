@@ -345,7 +345,7 @@ else:
                 st.write("No location logs available.")
 
             if st.button('Clear Logs'):
-                st.session_state.logs = []
+                st.session_state.logs_df = []
                 try:
                     os.remove('logs_df.csv')
                 except FileNotFoundError:
