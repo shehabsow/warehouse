@@ -49,7 +49,7 @@ def load_logs():
         logs_location = []
     
     try:
-        logs_receving = pd.read_csv('logs_receving1.csv').to_dict('records')
+        logs_receving = pd.read_csv('logs_receving.csv').to_dict('records')
     except FileNotFoundError:
         logs_receving = []
 
@@ -166,7 +166,7 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     }
     st.session_state.logs_receving.append(log_entry)
     logs_df = pd.DataFrame(st.session_state.logs_receving)
-    logs_df.to_csv('logs_receving1.csv', index=False)
+    logs_df.to_csv('logs_receving.csv', index=False)
 
 # Handle quantity change
 def on_quantity_change():
@@ -225,7 +225,7 @@ else:
         st.session_state.logs_location = []
     
     try:
-        logs_df = pd.read_csv('logs_receving1.csv')
+        logs_df = pd.read_csv('logs_receving.csv')
         st.session_state.logs_receving = logs_df.to_dict('records')
     except FileNotFoundError:
         st.session_state.logs_receving= []
@@ -320,13 +320,13 @@ else:
         def clear_logs(log_type):
             if log_type == "receiving":
                 st.session_state.logs_receving = []
-                if os.path.exists('user_logs_receving.csv'):
-                    os.remove('user_logs_receving.csv')
+                if os.path.exists('logs_receving.csv'):
+                    os.remove('logs_receving.csv')
                 st.success("Receiving logs cleared successfully!")
             elif log_type == "location":
                 st.session_state.logs_location = []
-                if os.path.exists('location_logs.csv'):
-                    os.remove('location_logs.csv')
+                if os.path.exists('logs_location.csv'):
+                    os.remove('logs_location.csv')
                 st.success("Location logs cleared successfully!")
 
         def main():
@@ -362,5 +362,4 @@ else:
         
         if __name__ == '__main__':
             main()
-        
         
