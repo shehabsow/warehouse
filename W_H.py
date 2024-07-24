@@ -239,11 +239,11 @@ else:
             
             if st.session_state.username == 'engy':
                 if status == 'pending':
-                    st.button('Confirm'):
+                    st.button('Confirm')
                     batch_status[batch_no] = 'confirmed'
                     save_batch_status(batch_status)
                     st.experimental_rerun()
-                    st.button('Reject'):
+                    st.button('Reject')
                     batch_status[batch_no] = 'rejected'
                     save_batch_status(batch_status)
                     st.experimental_rerun()
