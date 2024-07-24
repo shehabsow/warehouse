@@ -341,6 +341,16 @@ else:
                 st.download_button(label="Download Logs as CSV", data=csv, file_name='location_logs.csv', mime='text/csv')
             else:
                 st.write("No location logs available.")
+
+        if st.button('Clear Logs'):
+            st.session_state.logs = []
+            try:
+                os.remove('logs.csv')
+            except FileNotFoundError:
+                pass
+            st.success("Logs cleared successfully!")
+        else:
+            st.write("No logs available."
         if __name__ == '__main__':
             main()
 
