@@ -317,7 +317,18 @@ else:
             main()
     
     elif page == "Logs":
-        def main():
+        def main():7
+            def clear_logs(log_type):
+                if log_type == "receiving":
+                    st.session_state.logs_receving = []
+                    if os.path.exists('user_logs_receving.csv'):
+                        os.remove('user_logs_receving.csv')
+                    st.success("Receiving logs cleared successfully!")
+                elif log_type == "location":
+                    st.session_state.logs_location = []
+                    if os.path.exists('location_logs.csv'):
+                        os.remove('location_logs.csv')
+                    st.success("Location logs cleared successfully!")
             
             col1, col2 = st.columns([2, 0.75])
             with col1:
@@ -332,6 +343,8 @@ else:
                 st.dataframe(logs_df)
                 csv = logs_df.to_csv(index=False)
                 st.download_button(label="Download Logs as sheet", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
+                if st.button("Clear Receiving Logs"):
+                    clear_logs("receiving")
             else:
                 st.write("No receving logs available.")
     
@@ -341,18 +354,11 @@ else:
                 st.dataframe(logs_df)
                 csv = logs_df.to_csv(index=False)
                 st.download_button(label="Download Logs as CSV", data=csv, file_name='location_logs.csv', mime='text/csv')
+                if st.button("Clear Location Logs"):
+                    clear_logs("location")
             else:
                 st.write("No location logs available.")
 
-            if st.button('Clear Logs'):
-                st.session_state.logs_df = []
-                try:
-                    os.remove('logs_df.csv')
-                except FileNotFoundError:
-                    pass
-                st.success("Logs cleared successfully!")
-            else:
-                st.write("No logs available.")
         if __name__ == '__main__':
             main()
 
