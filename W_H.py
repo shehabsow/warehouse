@@ -137,7 +137,13 @@ def calculate_packaging(total_boxes):
 # Function to add new batch
 def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark):
     global df_Receving
-    pallets, cartons, boxes = calculate_packaging(int(QTY_pack))
+    try:
+        QTY_pack_int = int(QTY_pack)
+    except ValueError:
+        st.error("The quantity must be a valid integer.")
+        return
+
+    pallets, cartons, boxes = calculate_packaging(QTY_pack_int)
     new_row = {
         'Product Name': Product_Name, 'Batch No': Batch_No, 'Item Code': Item_Code, 'QTY pack': QTY_pack,
         'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark,
