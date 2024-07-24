@@ -208,7 +208,7 @@ else:
     if menu == 'Receive Batch':
         st.header('Receive New Batch')
         with st.form(key='receive_form'):
-            Product_Name = st.selectbox("Select Product Name", options=df_Material['Product Name'].unique())
+            Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
             Batch_No = st.text_input('Batch No')
             Item_Code = st.text_input('Item Code')
             QTY_pack = st.text_input('QTY pack', key='QTY_pack')
