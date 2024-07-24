@@ -364,7 +364,7 @@ else:
             main()
     elif page == "Custom Page":
         def main():
-            if st.session_state.username == "special_user":  # replace "special_user" with the actual username
+            if st.session_state.username == "knhp322":  # replace "special_user" with the actual username
                 st.subheader("Special User Page")
                 
                 # Define a status variable (example)
