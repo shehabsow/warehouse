@@ -350,7 +350,7 @@ else:
                 pass
             st.success("Logs cleared successfully!")
         else:
-            st.write("No logs available."
+            st.write("No logs available.")
         if __name__ == '__main__':
             main()
 
