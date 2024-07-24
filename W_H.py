@@ -150,7 +150,7 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_Receving1 = df_Receving1.append(new_row, ignore_index=True)
-    df_Receving1.to_csv('Receving.csv', index=False)
+    df_Receving1.to_csv('Receving1.csv', index=False)
     st.success(f"New item '{Batch_No}' added successfully with quantity {QTY_pack}!")
     log_entry = {
         'user': username,
