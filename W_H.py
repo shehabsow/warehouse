@@ -163,8 +163,8 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
         'Delivered by': Delivered_by,
         'Received by': Received_by
     }
-    st.session_state.logs_receving1.append(log_entry)
-    logs_df = pd.DataFrame(st.session_state.logs_receving1)
+    st.session_state.logs_receving.append(log_entry)
+    logs_df = pd.DataFrame(st.session_state.logs_receving)
     logs_df.to_csv('logs_receving1.csv', index=False)
 
 # Handle quantity change
@@ -224,10 +224,10 @@ else:
         st.session_state.logs_location = []
     
     try:
-        logs_df = pd.read_csv('logs_receving.csv')
-        st.session_state.logs_receving1 = logs_df.to_dict('records')
+        logs_df = pd.read_csv('logs_receving1.csv')
+        st.session_state.logs_receving = logs_df.to_dict('records')
     except FileNotFoundError:
-        st.session_state.logs_receving1 = []
+        st.session_state.logs_receving= []
     
     # Display options
     page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs"])
@@ -325,11 +325,11 @@ else:
                     </h2>
                 """, unsafe_allow_html=True)
             st.subheader("receving Logs")
-            if st.session_state.logs_receving1:
-                logs_df = pd.DataFrame(st.session_state.logs_receving1)
+            if st.session_state.logs_receving:
+                logs_df = pd.DataFrame(st.session_state.logs_receving)
                 st.dataframe(logs_df)
                 csv = logs_df.to_csv(index=False)
-                st.download_button(label="Download Logs as sheet", data=csv, file_name='user_logs_receving1.csv', mime='text/csv')
+                st.download_button(label="Download Logs as sheet", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
             else:
                 st.write("No receving logs available.")
     
