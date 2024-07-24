@@ -8,11 +8,16 @@ import os
 
 st.set_page_config(
     layout="wide",
-    page_title='Warehouse',
+    page_title='warehouse',
     page_icon='🪙')
+
+
+
 
 egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
+#df_BIN = pd.read_csv('LOCATION.csv')
+#df_Receving = pd.read_csv('Receving.csv')
 
 # Load users data
 def load_users():
@@ -35,19 +40,6 @@ def load_users():
 def save_users(users):
     with open('users.json', 'w') as f:
         json.dump(users, f)
-
-# Load batch status data
-def load_batch_status():
-    try:
-        with open('batch_status.json', 'r') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-
-# Save batch status data to JSON file
-def save_batch_status(batch_status):
-    with open('batch_status.json', 'w') as f:
-        json.dump(batch_status, f)
 
 # Load logs from files
 def load_logs():
@@ -89,6 +81,46 @@ def update_password(username, new_password, confirm_new_password):
         st.success("Password updated successfully!")
     else:
         st.error("Passwords do not match!")
+
+# Function to add new location
+def update_password(username, new_password, confirm_new_password):
+    if new_password == confirm_new_password:
+        users[username]["password"] = new_password
+        users[username]["first_login"] = False
+        users[username]["last_password_update"] = str(datetime.now(egypt_tz))
+        save_users(users)
+        st.session_state.first_login = False
+        st.session_state.password_expired = False
+        st.success("Password updated successfully!")
+    else:
+        st.error("Passwords do not match!")
+
+# Function to add new location
+def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
+    global df_BIN
+    new_row = {
+        'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
+        "Warehouse Operator": Warehouse_Operator, 'Quantity': Quantity, 'Date': Date,
+        'BIN1': BIN1, 'QTY1': QTY1, 'BIN2': BIN2, 'QTY2': QTY2, 'BIN3': BIN3, 'QTY3': QTY3
+    }
+    df_BIN = df_BIN.append(new_row, ignore_index=True)
+    df_BIN.to_csv('LOCATION.csv', index=False)
+    st.success(f"New item '{Batch_Number}' added successfully with quantity {Quantity}!")
+    log_entry = {
+        'user': username,
+        'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+        'Batch Number': Batch_Number,
+        'Quantity': Quantity,
+        'BIN1': BIN1,
+        'QTY1': QTY1,
+        'BIN2': BIN2,
+        'QTY2': QTY2,
+        'BIN3': BIN3,
+        'QTY3': QTY3
+    }
+    st.session_state.logs_location.append(log_entry)
+    logs_df = pd.DataFrame(st.session_state.logs_location)
+    logs_df.to_csv('logs_location.csv', index=False)
 
 # Function to calculate packaging
 def calculate_packaging(total_boxes):
@@ -137,16 +169,14 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     logs_df.to_csv('logs_receving.csv', index=False)
 
 # Handle quantity change
-def on_quantity_change(qty_pack):
+def on_quantity_change():
     try:
-        qty_pack = int(qty_pack)
-        return calculate_packaging(qty_pack)
+        qty_pack = int(st.session_state['QTY_pack'])
+        st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(qty_pack)
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
-        return None, None, None
 
 users = load_users()
-batch_status = load_batch_status()
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -195,62 +225,141 @@ else:
         st.session_state.logs_location = []
     
     try:
-        logs_df = pd.read_csv('logs_receving1.csv')
+        logs_df = pd.read_csv('logs_receving.csv')
         st.session_state.logs_receving = logs_df.to_dict('records')
     except FileNotFoundError:
-        st.session_state.logs_receving = []
+        st.session_state.logs_receving= []
     
-    st.title('Warehouse Inventory System')
-    st.sidebar.title('Navigation')
+    # Display options
+    page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs"])
     
-    menu = st.sidebar.radio('Go to', ['Receive Batch', 'View Batches', 'Log Out'])
-    
-    if menu == 'Receive Batch':
-        st.header('Receive New Batch')
-        with st.form(key='receive_form'):
-            Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-            Batch_No = st.text_input('Batch No')
-            Item_Code = st.text_input('Item Code')
-            QTY_pack = st.text_input('QTY pack', key='QTY_pack')
-            Date = st.date_input('Date')
-            Delivered_by = st.text_input('Delivered by')
-            Received_by = st.text_input('Received by')
-            
-            if 'pallets' in st.session_state and 'cartons_left' in st.session_state and 'boxes_left' in st.session_state:
-                st.write(f"Pallets: {st.session_state['pallets']}, Cartons left: {st.session_state['cartons_left']}, Boxes left: {st.session_state['boxes_left']}")
-            
-            submit_button = st.form_submit_button(label='Add New Batch')
+    if page == 'Add New Batch':
         
-        if submit_button:
-            pallets, cartons_left, boxes_left = on_quantity_change(QTY_pack)
-            if pallets is not None and cartons_left is not None and boxes_left is not None:
-                st.session_state['pallets'] = pallets
-                st.session_state['cartons_left'] = cartons_left
-                st.session_state['boxes_left'] = boxes_left
-                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
-    
-    elif menu == 'View Batches':
-        st.header('View Batches')
-        for index, row in df_Receving1.iterrows():
-            batch_no = row['Batch No']
-            status = batch_status.get(batch_no, 'pending')
-            color = {'confirmed': 'green', 'rejected': 'red', 'pending': 'yellow'}[status]
-            st.markdown(f"**Batch No:** {row['Batch No']} **Status:** <span style='color:{color}'>{status}</span>", unsafe_allow_html=True)
+        def main():
+            col1, col2 = st.columns([2, 0.75])
+            with col1:
+                st.markdown("""
+                    <h2 style='text-align: center; font-size: 40px; color: black;'>
+                        Add New Batch
+                    </h2>
+                """, unsafe_allow_html=True)
+            col1, col2, col3, col4, col5= st.columns([3, 2, 1.5, 1.5, 1.5])
+            with col1:
+                Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                st.text(f"Item Code: {Item_Code}")
+            with col2:
+                Batch_No = st.text_input('Batch No:')
+                Date = st.date_input('Date:')
+            with col3:
+                QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
+            with col4:
+                Delivered_by = st.text_input('Delivered by:')
+            with col5:
+                Received_by = st.text_input('Received by:')
             
-            if st.session_state.username == 'knhp322':
-                if status == 'pending':
-                    if st.button('Confirm'):
-                        batch_status[batch_no] = 'confirmed'
-                        save_batch_status(batch_status)
-                        st.experimental_rerun()
-                    if st.button('Reject'):
-                        batch_status[batch_no] = 'rejected'
-                        save_batch_status(batch_status)
-                        st.experimental_rerun()
+            
+            # Display packaging results
+            st.text(f"Pallets: {st.session_state.get('pallets', '')}")
+            st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
+            st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
+            st.dataframe(df_Receving1)
+            if st.button("Add Batch"):
+                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
+                st.write('## Updated Items')
+                st.dataframe(df_Receving1)
+            csv = df_Receving1.to_csv(index=False)
+            st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
+                     
+        if __name__ == '__main__':
+            main()
     
-    elif menu == 'Log Out':
-        st.session_state.logged_in = False
-        st.session_state.username = None
-        st.session_state.first_login = None
-        st.session_state.password_expired = None
-        st.experimental_rerun()
+    
+    elif page == "FINISHED GOODS BIN LOCATION SHEET":
+        def main():
+            col1, col2 = st.columns([2, 0.75])
+            with col1:
+                st.markdown("""
+                    <h2 style='text-align: center; font-size: 40px; color: black;'>
+                        FINISHED GOODS BIN LOCATION SHEET
+                    </h2>
+                """, unsafe_allow_html=True)
+            col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+            with col1:
+                Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                st.text(f"Item Code: {Item_Code}")
+            with col2:
+                Batch_Number = st.text_input('Batch Number:')
+                Date = st.date_input('Date:')
+            with col3:
+                Warehouse_Operator = st.text_input('Warehouse Operator:')
+            with col4:
+                Quantity = st.text_input('Quantity:')
+            with col5:
+                BIN1 = st.text_input('BIN1:')
+                QTY1 = st.text_input('QTY1:')
+            with col6:
+                BIN2 = st.text_input('BIN2:')
+                QTY2 = st.text_input('QTY2:')
+                BIN3 = st.text_input('BIN3:')
+                QTY3 = st.text_input('QTY3:')
+
+            if st.button("Add Location"):
+                add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                st.write('## Updated Items')
+                st.dataframe(df_BIN)
+            csv = df_BIN.to_csv(index=False)
+            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+        
+    
+        if __name__ == '__main__':
+            main()
+    
+    elif page == "Logs":
+        def clear_logs(log_type):
+            if log_type == "receiving":
+                st.session_state.logs_receving = []
+                if os.path.exists('logs_receving.csv'):
+                    os.remove('logs_receving.csv')
+                st.success("Receiving logs cleared successfully!")
+            elif log_type == "location":
+                st.session_state.logs_location = []
+                if os.path.exists('logs_location.csv'):
+                    os.remove('logs_location.csv')
+                st.success("Location logs cleared successfully!")
+
+        def main():
+            col1, col2 = st.columns([2, 0.75])
+            with col1:
+                st.markdown("""
+                    <h2 style='text-align: center; font-size: 40px; color: black;'>
+                        View Logs
+                    </h2>
+                """, unsafe_allow_html=True)
+            
+            st.subheader("Receiving Logs")
+            if st.session_state.get('logs_receving', []):
+                logs_df = pd.DataFrame(st.session_state.logs_receving)
+                st.dataframe(logs_df)
+                csv = logs_df.to_csv(index=False)
+                st.download_button(label="Download Logs as CSV", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
+                if st.button("Clear Receiving Logs"):
+                    clear_logs("receiving")
+            else:
+                st.write("No receiving logs available.")
+            
+            st.subheader("Location Logs")
+            if st.session_state.get('logs_location', []):
+                logs_df = pd.DataFrame(st.session_state.logs_location)
+                st.dataframe(logs_df)
+                csv = logs_df.to_csv(index=False)
+                st.download_button(label="Download Logs as CSV", data=csv, file_name='location_logs.csv', mime='text/csv')
+                if st.button("Clear Location Logs"):
+                    clear_logs("location")
+            else:
+                st.write("No location logs available.")
+        
+        if __name__ == '__main__':
+            main()
+        
