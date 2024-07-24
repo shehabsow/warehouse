@@ -135,7 +135,7 @@ def calculate_packaging(total_boxes):
     return pallets, cartons_left, boxes_left
 
 # Function to add new batch
-def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark):
+def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by):
     global df_Receving
     try:
         QTY_pack_int = int(QTY_pack)
@@ -146,7 +146,7 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     pallets, cartons, boxes = calculate_packaging(QTY_pack_int)
     new_row = {
         'Product Name': Product_Name, 'Batch No': Batch_No, 'Item Code': Item_Code, 'QTY pack': QTY_pack,
-        'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by, 'Remark': Remark,
+        'Date': Date, 'Delivered by': Delivered_by, 'Received by': Received_by,
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_Receving = df_Receving.append(new_row, ignore_index=True)
@@ -161,8 +161,7 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
         'Cartons': cartons,
         'Boxes': boxes,
         'Delivered by': Delivered_by,
-        'Received by': Received_by,
-        'Remark': Remark
+        'Received by': Received_by
     }
     st.session_state.logs_receving.append(log_entry)
     logs_df = pd.DataFrame(st.session_state.logs_receving)
@@ -216,7 +215,7 @@ else:
     try:
         df_Receving = pd.read_csv('Receving.csv')
     except FileNotFoundError:
-        df_Receving = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by", "Remark"])
+        df_Receving = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
     
     try:
         logs_df = pd.read_csv('logs_location.csv')
@@ -243,7 +242,7 @@ else:
                         Add New Batch
                     </h2>
                 """, unsafe_allow_html=True)
-            col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+            col1, col2, col3, col4, col5= st.columns([3, 2, 1.5, 1.5, 1.5])
             with col1:
                 Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                 Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
@@ -257,8 +256,7 @@ else:
                 Delivered_by = st.text_input('Delivered by:')
             with col5:
                 Received_by = st.text_input('Received by:')
-            with col6:
-                Remark = st.text_input('Remark:')
+            
             
             # Display packaging results
             st.text(f"Pallets: {st.session_state.get('pallets', '')}")
@@ -266,7 +264,7 @@ else:
             st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
 
             if st.button("Add Batch"):
-                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by, Remark)
+                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
                 st.write('## Updated Items')
                 st.dataframe(df_Receving)
             csv = df_Receving.to_csv(index=False)
