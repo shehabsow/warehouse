@@ -243,7 +243,7 @@ else:
                         batch_status[batch_no] = 'confirmed'
                         save_batch_status(batch_status)
                         st.experimental_rerun()
-                    if st.button('Reject', key2=f'reject_{batch_no}'):
+                    if st.button('Reject', key=f'reject_{batch_no}'):
                         batch_status[batch_no] = 'rejected'
                         save_batch_status(batch_status)
                         st.experimental_rerun()
