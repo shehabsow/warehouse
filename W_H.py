@@ -137,12 +137,13 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     logs_df.to_csv('logs_receving.csv', index=False)
 
 # Handle quantity change
-def on_quantity_change():
+def on_quantity_change(qty_pack):
     try:
-        qty_pack = int(st.session_state['QTY_pack'])
-        st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(qty_pack)
+        qty_pack = int(qty_pack)
+        return calculate_packaging(qty_pack)
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
+        return None, None, None
 
 users = load_users()
 batch_status = load_batch_status()
@@ -207,10 +208,10 @@ else:
     if menu == 'Receive Batch':
         st.header('Receive New Batch')
         with st.form(key='receive_form'):
-            Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+            Product_Name = st.selectbox("Select Product Name", options=df_Material['Product Name'].unique())
             Batch_No = st.text_input('Batch No')
             Item_Code = st.text_input('Item Code')
-            QTY_pack = st.text_input('QTY pack', key='QTY_pack', on_change=on_quantity_change)
+            QTY_pack = st.text_input('QTY pack', key='QTY_pack')
             Date = st.date_input('Date')
             Delivered_by = st.text_input('Delivered by')
             Received_by = st.text_input('Received by')
@@ -221,7 +222,12 @@ else:
             submit_button = st.form_submit_button(label='Add New Batch')
         
         if submit_button:
-            add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
+            pallets, cartons_left, boxes_left = on_quantity_change(QTY_pack)
+            if pallets is not None and cartons_left is not None and boxes_left is not None:
+                st.session_state['pallets'] = pallets
+                st.session_state['cartons_left'] = cartons_left
+                st.session_state['boxes_left'] = boxes_left
+                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
     
     elif menu == 'View Batches':
         st.header('View Batches')
