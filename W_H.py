@@ -317,7 +317,7 @@ else:
             main()
     
     elif page == "Logs":
-        def main():7
+        def main():
             def clear_logs(log_type):
                 if log_type == "receiving":
                     st.session_state.logs_receving = []
