@@ -239,14 +239,14 @@ else:
             
             if st.session_state.username == 'engy':
                 if status == 'pending':
-                    if st.button('Confirm'):
-                        batch_status[batch_no] = 'confirmed'
-                        save_batch_status(batch_status)
-                        st.experimental_rerun()
-                    if st.button('Reject'):
-                        batch_status[batch_no] = 'rejected'
-                        save_batch_status(batch_status)
-                        st.experimental_rerun()
+                    st.button('Confirm'):
+                    batch_status[batch_no] = 'confirmed'
+                    save_batch_status(batch_status)
+                    st.experimental_rerun()
+                    st.button('Reject'):
+                    batch_status[batch_no] = 'rejected'
+                    save_batch_status(batch_status)
+                    st.experimental_rerun()
     
     elif menu == 'Log Out':
         st.session_state.logged_in = False
