@@ -237,16 +237,16 @@ else:
             color = {'confirmed': 'green', 'rejected': 'red', 'pending': 'yellow'}[status]
             st.markdown(f"**Batch No:** {row['Batch No']} **Status:** <span style='color:{color}'>{status}</span>", unsafe_allow_html=True)
             
-            if st.session_state.username == 'engy':
+            if st.session_state.username == 'knhp322':
                 if status == 'pending':
-                    st.button('Confirm')
-                    batch_status[batch_no] = 'confirmed'
-                    save_batch_status(batch_status)
-                    st.experimental_rerun()
-                    st.button('Reject')
-                    batch_status[batch_no] = 'rejected'
-                    save_batch_status(batch_status)
-                    st.experimental_rerun()
+                    if st.button('Confirm', key=f'confirm_{batch_no}'):
+                        batch_status[batch_no] = 'confirmed'
+                        save_batch_status(batch_status)
+                        st.experimental_rerun()
+                    if st.button('Reject', key=f'reject_{batch_no}'):
+                        batch_status[batch_no] = 'rejected'
+                        save_batch_status(batch_status)
+                        st.experimental_rerun()
     
     elif menu == 'Log Out':
         st.session_state.logged_in = False
