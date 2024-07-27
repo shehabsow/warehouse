@@ -218,7 +218,7 @@ def display_batch_details_and_confirmation():
     if os.path.exists(confirmed_file):
         st.header("الدفعات المؤكدة")
         df_confirmed = pd.read_csv(confirmed_file)
-        st.dataframe(df_confirmed)
+        st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
 
    
     
