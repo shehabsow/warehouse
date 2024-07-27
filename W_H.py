@@ -205,24 +205,13 @@ def display_batch_details_and_confirmation():
             
            
             if st.button("تأكيد الدفعة"):
+                st.dataframe(batch_df)
                 st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
                 df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
                 df_Receving1.to_csv('Receving1.csv', index=False)
                 
-                log_entry = {
-                    'user': st.session_state.username,
-                    'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-                    'Batch No': batch_number,
-                    'operation': 'confirm'
-                }
-                st.session_state.logs.append(log_entry)
-                logs_df = pd.DataFrame(st.session_state.logs)
-                logs_df.to_csv('logs_confirmation.csv', index=False)
-                st.experimental_rerun()
-                if 'Batch No' in batch_df.columns:
-                    st.dataframe(
-                        batch_df.style.applymap(highlight_confirmed, subset=['Batch No'])
-                    )
+           
+                    
                 else:
                     st.error("العمود 'Batch No' غير موجود في البيانات.")
         else:
