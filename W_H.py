@@ -179,32 +179,19 @@ def on_quantity_change():
 def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
     
-    try:
-        df_Receving1 = pd.read_csv('Receving1.csv')
-    except FileNotFoundError:
-        st.error("ملف الدفعات غير موجود.")
-        return
-
+    # Load the batch numbers from the CSV file
+    df_Receving1 = pd.read_csv('Receving1.csv')
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
 
+    # Display dropdown to select a batch number
     batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
     
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         if not batch_df.empty:
-            def highlight_confirmed(val):
-                color = 'background-color: green' if val == 'Yes' else ''
-                return color
-            
-            st.dataframe(
-                batch_df.style.applymap(highlight_confirmed, subset=['Confirmed'])
-            )
-            
+            st.dataframe(batch_df)
             if st.button("تأكيد الدفعة"):
                 st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
-                df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
-                df_Receving1.to_csv('Receving1.csv', index=False)
-                
                 log_entry = {
                     'user': st.session_state.username,
                     'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
@@ -214,7 +201,9 @@ def display_batch_details_and_confirmation():
                 st.session_state.logs.append(log_entry)
                 logs_df = pd.DataFrame(st.session_state.logs)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
-                st.experimental_rerun()
+                st.dataframe(
+                    batch_df.style.applymap(lambda x: 'background-color: green', subset=['Batch No'])
+                )
         else:
             st.error(f"الدفعة {batch_number} غير موجودة!")
 
