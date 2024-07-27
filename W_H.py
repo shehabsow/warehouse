@@ -427,13 +427,13 @@ else:
             display_batch_details_and_confirmation()
             if st.button('Clear Logs'):
                     
-                        try:
-                            os.remove('df_Receving1.csv')
-                        except FileNotFoundError:
-                            pass
-                        st.success("Logs cleared successfully!")
-                else:
-                    st.write("No logs available.")
+                try:
+                    os.remove('df_Receving1.csv')
+                except FileNotFoundError:
+                    pass
+                st.success("Logs cleared successfully!")
+            else:
+                st.write("No logs available.")
         if __name__ == '__main__':
             main()
             
