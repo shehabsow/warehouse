@@ -198,10 +198,7 @@ def display_batch_details_and_confirmation():
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
-
-    else:
-        st.error(f"الدفعة {batch_number} غير موجودة!")
-
+        
     if st.button("تأكيد الدفعة"):
         st.dataframe(batch_df)
         st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
