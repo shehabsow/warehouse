@@ -192,20 +192,34 @@ def display_batch_details_and_confirmation():
         return
 
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
-
-    # إلزام المستخدم باختيار رقم البتش
     batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
-    
-    # عرض الدفعة عند الضغط على زر "عرض الدفعة"
+
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
     
-    # تأكيد الدفعة عند الضغط على زر "تأكيد الدفعة"
     if st.button("تأكيد الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
+        
+        # حفظ الدفعة المؤكدة في ملف CSV جديد أو تحديث الملف الحالي
+        confirmed_file = 'confirmed_batches.csv'
+        if os.path.exists(confirmed_file):
+            df_confirmed = pd.read_csv(confirmed_file)
+            df_confirmed = pd.concat([df_confirmed, batch_df], ignore_index=True).drop_duplicates()
+        else:
+            df_confirmed = batch_df
+        
+        df_confirmed.to_csv(confirmed_file, index=False)
         st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
+
+    # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
+    confirmed_file = 'confirmed_batches.csv'
+    if os.path.exists(confirmed_file):
+        st.header("الدفعات المؤكدة")
+        df_confirmed = pd.read_csv(confirmed_file)
+        st.dataframe(df_confirmed)
+
    
     
 
