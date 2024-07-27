@@ -426,7 +426,7 @@ else:
 
     elif page == 'Batch Confirmation':   
         def main():
-            display_batch_confirmation()
+            display_batch_details_and_confirmation()
         if __name__ == '__main__':
             main()
             
