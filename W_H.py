@@ -194,7 +194,7 @@ def display_batch_details_and_confirmation():
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
 
     batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
-    
+    batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
