@@ -428,7 +428,7 @@ else:
             if st.button('Clear Logs'):
                     
                 try:
-                    os.remove('df_Receving1.csv')
+                    os.remove('df_confirmed.csv')
                 except FileNotFoundError:
                     pass
                 st.success("Logs cleared successfully!")
