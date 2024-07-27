@@ -186,25 +186,59 @@ def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
     
     try:
-        df_Receving1 = pd.read_csv('Receving1.csv')
+        df_Receiving1 = pd.read_csv('Receiving1.csv')
     except FileNotFoundError:
         st.error("ملف الدفعات غير موجود.")
         return
+    except pd.errors.EmptyDataError:
+        st.error("ملف الدفعات فارغ.")
+        return
 
-    batch_numbers = df_Receving1['Batch No'].unique().tolist()
+    batch_numbers = df_Receiving1['Batch No'].unique().tolist()
 
-    batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
-    batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+    batch_number = st.selectbox("اختر رقم الدفعة:", ["اختر رقم الدفعة"] + batch_numbers)
+    
+    if batch_number == "اختر رقم الدفعة":
+        st.warning("يرجى اختيار رقم الدفعة.")
+        return
+
     if st.button("عرض الدفعة"):
-        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
-        st.dataframe(batch_df)
-        
-    if st.button("تأكيد الدفعة"):
-        st.dataframe(batch_df)
-        st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
+        batch_df = df_Receiving1[df_Receiving1['Batch No'] == batch_number]
+        if not batch_df.empty:
+            st.dataframe(batch_df)
+        else:
+            st.error(f"الدفعة {batch_number} غير موجودة!")
 
-    else:
-        st.error(f"الدفعة {batch_number} غير موجودة!")
+    if st.button("تأكيد الدفعة"):
+        if batch_number == "اختر رقم الدفعة":
+            st.warning("يرجى اختيار رقم الدفعة.")
+        else:
+            batch_df = df_Receiving1[df_Receiving1['Batch No'] == batch_number]
+            if not batch_df.empty:
+                st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
+                df_Receiving1.loc[df_Receiving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
+                df_Receiving1.to_csv('Receiving1.csv', index=False)
+                
+                log_entry = {
+                    'user': st.session_state.username,
+                    'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+                    'Batch No': batch_number,
+                    'operation': 'confirm'
+                }
+                st.session_state.logs_confirmation.append(log_entry)
+                logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+                logs_df.to_csv('logs_confirmation.csv', index=False)
+                
+                # Display confirmed batch details with highlighted batch number
+                if 'Batch No' in batch_df.columns:
+                    batch_df['Confirmed'] = 'Yes'
+                    st.dataframe(
+                        batch_df.style.applymap(highlight_confirmed, subset=['Batch No'])
+                    )
+                else:
+                    st.error("العمود 'Batch No' غير موجود في البيانات.")
+            else:
+                st.error(f"الدفعة {batch_number} غير موجودة!")
                 
       
     
