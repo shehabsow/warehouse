@@ -206,8 +206,8 @@ def display_batch_details_and_confirmation():
         
     else:
         st.error("العمود 'Batch No' غير موجود في البيانات.")
-    else:
-        st.error(f"الدفعة {batch_number} غير موجودة!")
+        else:
+            st.error(f"الدفعة {batch_number} غير موجودة!")
 
 
 
