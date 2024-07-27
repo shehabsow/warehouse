@@ -218,7 +218,7 @@ users = load_users()
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
-    st.session_state.logs_location, st.session_state.logs_receving1 = load_logs()
+    st.session_state.logs_location, st.session_state.logs_receving1,st.session_state.logs_confirmation = load_logs()
 
 if not st.session_state.logged_in:
     col1, col2, col3 = st.columns([1, 1, 1])
