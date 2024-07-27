@@ -198,6 +198,7 @@ def display_batch_details_and_confirmation():
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         if not batch_df.empty:
+            st.dataframe(batch_df)
             def highlight_confirmed(val):
                 color = 'background-color: green' if val == 'Yes' else ''
                 return color
