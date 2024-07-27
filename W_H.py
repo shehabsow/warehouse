@@ -181,10 +181,6 @@ def on_quantity_change():
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
 
-def highlight_confirmed(val):
-    color = 'background-color: green' if val == 'Yes' else ''
-    return color
-
 # Function to display batch details and confirmation
 def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
