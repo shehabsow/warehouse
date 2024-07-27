@@ -53,7 +53,26 @@ def load_logs():
     except FileNotFoundError:
         logs_receving = []
 
-    return logs_location, logs_receving
+    try:
+        logs_confirmation = pd.read_csv('logs_confirmation.csv').to_dict('records')
+    except FileNotFoundError:
+        logs_confirmation = []
+    
+    try:
+        logs_rejection = pd.read_csv('logs_rejection.csv').to_dict('records')
+    except FileNotFoundError:
+        logs_rejection = []
+
+    st.session_state.logs_confirmation = logs_confirmation
+    st.session_state.logs_rejection = logs_rejection
+
+    st.write("سجلات التأكيد:")
+    st.dataframe(pd.DataFrame(logs_confirmation))
+
+    st.write("سجلات الرفض:")
+    st.dataframe(pd.DataFrame(logs_rejection))
+
+    return logs_location, logs_receving,logs_rejection,logs_confirmation
 
 # Login function
 def login(username, password):
@@ -177,31 +196,46 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 def display_batch_confirmation():
-    st.header("Batch Confirmation")
-    batch_number = st.text_input("Enter Batch Number:")
+    st.header("تأكيد أو رفض الدفعة")
+    batch_number = st.text_input("أدخل رقم الدفعة:")
     
-    if st.button("Confirm Batch"):
-        batch_df = st.session_state.df[st.session_state.df['Batch Number'] == batch_number]
+    if st.button("تأكيد الدفعة"):
+        batch_df = st.session_state.df[st.session_state.df['Batch No'] == batch_number]
         if not batch_df.empty:
-            st.success(f"Batch {batch_number} confirmed successfully!")
+            st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
             log_entry = {
                 'user': st.session_state.username,
                 'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-                'batch_number': batch_number,
+                'Batch No': batch_number,
                 'operation': 'confirm'
             }
             st.session_state.logs.append(log_entry)
-            
-            # Save logs to CSV
             logs_df = pd.DataFrame(st.session_state.logs)
-            logs_df.to_csv('logs.csv', index=False)
-            
-            # Highlight confirmed batch
+            logs_df.to_csv('logs_confirmation.csv', index=False)
             st.dataframe(
-                batch_df.style.apply(lambda x: ['background-color: green' if v == batch_number else '' for v in x], subset=['Batch Number'])
+                batch_df.style.applymap(lambda x: 'background-color: green', subset=['Batch No'])
             )
         else:
-            st.error(f"Batch {batch_number} not found!")
+            st.error(f"الدفعة {batch_number} غير موجودة!")
+
+    if st.button("رفض الدفعة"):
+        batch_df = st.session_state.df[st.session_state.df['Batch No'] == batch_number]
+        if not batch_df.empty:
+            st.error(f"تم رفض الدفعة {batch_number}!")
+            log_entry = {
+                'user': st.session_state.username,
+                'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+                'Batch No': batch_number,
+                'operation': 'reject'
+            }
+            st.session_state.logs.append(log_entry)
+            logs_df = pd.DataFrame(st.session_state.logs)
+            logs_df.to_csv('logs_rejection.csv', index=False)
+            st.dataframe(
+                batch_df.style.applymap(lambda x: 'background-color: red', subset=['Batch No'])
+            )
+        else:
+            st.error(f"الدفعة {batch_number} غير موجودة!")
 
 users = load_users()
 
