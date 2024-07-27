@@ -53,7 +53,12 @@ def load_logs():
     except FileNotFoundError:
         logs_receving = []
 
-    return logs_location, logs_receving
+    try:
+        logs_confirmation = pd.read_csv('logs_confirmation.csv').to_dict('records')
+    except FileNotFoundError:
+        logs_confirmation = []
+
+    return logs_location, logs_receving,logs_confirmation
 
 # Login function
 def login(username, password):
@@ -198,8 +203,8 @@ def display_batch_details_and_confirmation():
                     'Batch No': batch_number,
                     'operation': 'confirm'
                 }
-                st.session_state.logs.append(log_entry)
-                logs_df = pd.DataFrame(st.session_state.logs)
+                st.session_state.logs_confirmation.append(log_entry)
+                logs_df = pd.DataFrame(st.session_state.logs_confirmation)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
                 st.dataframe(
                     batch_df.style.applymap(lambda x: 'background-color: green', subset=['Batch No'])
