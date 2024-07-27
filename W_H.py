@@ -199,19 +199,11 @@ def display_batch_details_and_confirmation():
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         if not batch_df.empty:
             st.dataframe(batch_df)
-            def highlight_confirmed(val):
-                color = 'background-color: green' if val == 'Yes' else ''
-                return color
-            
-           
+
         if st.button("تأكيد الدفعة"):
             st.dataframe(batch_df)
             st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
-            df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
-            df_Receving1.to_csv('Receving1.csv', index=False)
-                
-           
-                    
+            
         else:
             st.error("العمود 'Batch No' غير موجود في البيانات.")
     else:
