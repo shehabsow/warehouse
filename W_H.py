@@ -201,10 +201,7 @@ def display_batch_details_and_confirmation():
                 color = 'background-color: green' if val == 'Yes' else ''
                 return color
             
-            st.dataframe(
-                batch_df.style.applymap(highlight_confirmed, subset=['Confirmed'])
-            )
-            
+           
             if st.button("تأكيد الدفعة"):
                 st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
                 df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
