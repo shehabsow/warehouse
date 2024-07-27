@@ -397,37 +397,16 @@ else:
                     clear_logs("location")
             else:
                 st.write("No location logs available.")
+
+            if st.session_state.get('logs_confirmation', []):
+                logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+                st.dataframe(logs_df)
+                csv = logs_df.to_csv(index=False)
+                st.download_button(label="Download Logs as CSV", data=csv, file_name='logs_confirmation.csv', mime='text/csv')
         
         if __name__ == '__main__':
             main()
-    elif page == "Custom Page":
-        def main():
-            if st.session_state.username == "knhp322":  # replace "special_user" with the actual username
-                st.subheader("Special User Page")
-                
-                # Define a status variable (example)
-                status = st.selectbox("Select Status", ["Approved", "Rejected", "Pending"])
-                
-                # Define color codes based on status
-                color_map = {
-                    "Approved": "green",
-                    "Rejected": "red",
-                    "Pending": "yellow"
-                }
-                
-                # Display information based on custom logic
-                st.write("Welcome to your custom page!")
-                
-                # Show status with color
-                color = color_map.get(status, "black")
-                st.markdown(f"""
-                    <div style='text-align: center; font-size: 20px; color: {color};'>
-                        Status: {status}
-                    </div>
-                """, unsafe_allow_html=True)
-        
-        if __name__ == '__main__':
-            main()
+
 
     elif page == 'Batch Confirmation':   
         def main():
