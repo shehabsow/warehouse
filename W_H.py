@@ -184,15 +184,7 @@ def on_quantity_change():
 # Function to display batch details and confirmation
 def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
-    
-    try:
-        df_Receiving1 = pd.read_csv('Receiving1.csv')
-    except FileNotFoundError:
-        st.error("ملف الدفعات غير موجود.")
-        return
-    except pd.errors.EmptyDataError:
-        st.error("ملف الدفعات فارغ.")
-        return
+
 
     batch_numbers = df_Receiving1['Batch No'].unique().tolist()
 
