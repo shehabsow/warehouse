@@ -182,7 +182,7 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 # Function to display batch details and confirmation
-display_batch_details_and_confirmation():
+def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
     
     try:
