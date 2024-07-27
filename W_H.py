@@ -200,7 +200,7 @@ def display_batch_confirmation():
     batch_number = st.text_input("أدخل رقم الدفعة:")
     
     if st.button("تأكيد الدفعة"):
-        batch_df = st.session_state.df[st.session_state.df['Batch No'] == batch_number]
+        batch_df = st.session_state.df[st.session_state.df['Batch_No'] == batch_number]
         if not batch_df.empty:
             st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
             log_entry = {
