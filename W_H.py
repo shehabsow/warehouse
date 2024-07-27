@@ -220,6 +220,9 @@ def display_batch_details_and_confirmation():
         df_confirmed = pd.read_csv(confirmed_file)
         st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
 
+    csv = df_Receving1.to_csv(index=False)
+    st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
+
    
     
 
