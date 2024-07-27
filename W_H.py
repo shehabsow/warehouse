@@ -222,7 +222,20 @@ def display_batch_details_and_confirmation():
 
     csv = df_confirmed.to_csv(index=False)
     st.download_button(label="Download updated sheet", data=csv, file_name='df_confirmed.csv', mime='text/csv')
+    st.header("مسح محتوى ملف CSV")
+    file_to_clear = st.selectbox("اختر ملف CSV لمسحه:", ["none", "Receving1.csv", "confirmed_batches.csv"])
 
+    if st.button("مسح محتوى الملف"):
+        if file_to_clear != "none":
+            if os.path.exists(file_to_clear):
+                # إنشاء DataFrame فارغ بنفس الهيكل
+                df_empty = pd.DataFrame(columns=pd.read_csv(file_to_clear).columns)
+                df_empty.to_csv(file_to_clear, index=False)
+                st.success(f"تم مسح محتوى الملف {file_to_clear} بنجاح!")
+            else:
+                st.error(f"الملف {file_to_clear} غير موجود.")
+        else:
+            st.error("يرجى اختيار ملف لمسحه.")
    
     
 
