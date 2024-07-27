@@ -193,18 +193,19 @@ def display_batch_details_and_confirmation():
 
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
 
+    # إلزام المستخدم باختيار رقم البتش
     batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
-    batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+    
+    # عرض الدفعة عند الضغط على زر "عرض الدفعة"
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
-        
+    
+    # تأكيد الدفعة عند الضغط على زر "تأكيد الدفعة"
     if st.button("تأكيد الدفعة"):
-        st.dataframe(batch_df)
+        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
         st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
-
-    else:
-        st.error(f"الدفعة {batch_number} غير موجودة!")
    
     
 
