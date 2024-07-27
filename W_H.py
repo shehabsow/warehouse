@@ -179,17 +179,19 @@ def on_quantity_change():
 def display_batch_details_and_confirmation():
     st.header("تأكيد أو رفض الدفعة")
     
-    # Load the batch numbers from the CSV file
-    df_Receving1 = pd.read_csv('Receving1.csv')
+    try:
+        df_Receving1 = pd.read_csv('Receving1.csv')
+    except FileNotFoundError:
+        st.error("ملف الدفعات غير موجود.")
+        return
+
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
 
-    # Display dropdown to select a batch number
     batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
     
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         if not batch_df.empty:
-            # Highlight confirmed batch rows
             def highlight_confirmed(val):
                 color = 'background-color: green' if val == 'Yes' else ''
                 return color
@@ -200,7 +202,6 @@ def display_batch_details_and_confirmation():
             
             if st.button("تأكيد الدفعة"):
                 st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
-                # Update the CSV file to reflect the confirmed batch
                 df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
                 df_Receving1.to_csv('Receving1.csv', index=False)
                 
