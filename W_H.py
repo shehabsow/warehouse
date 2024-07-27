@@ -189,9 +189,21 @@ def display_batch_details_and_confirmation():
     if st.button("عرض الدفعة"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         if not batch_df.empty:
-            st.dataframe(batch_df)
+            # Highlight confirmed batch rows
+            def highlight_confirmed(val):
+                color = 'background-color: green' if val == 'Yes' else ''
+                return color
+            
+            st.dataframe(
+                batch_df.style.applymap(highlight_confirmed, subset=['Confirmed'])
+            )
+            
             if st.button("تأكيد الدفعة"):
                 st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
+                # Update the CSV file to reflect the confirmed batch
+                df_Receving1.loc[df_Receving1['Batch No'] == batch_number, 'Confirmed'] = 'Yes'
+                df_Receving1.to_csv('Receving1.csv', index=False)
+                
                 log_entry = {
                     'user': st.session_state.username,
                     'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
@@ -201,9 +213,7 @@ def display_batch_details_and_confirmation():
                 st.session_state.logs.append(log_entry)
                 logs_df = pd.DataFrame(st.session_state.logs)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
-                st.dataframe(
-                    batch_df.style.applymap(lambda x: 'background-color: green', subset=['Batch No'])
-                )
+                st.experimental_rerun()
         else:
             st.error(f"الدفعة {batch_number} غير موجودة!")
 
