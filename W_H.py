@@ -203,9 +203,9 @@ def display_batch_details_and_confirmation():
         st.dataframe(batch_df)
         st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
 
-else:
-    st.error(f"الدفعة {batch_number} غير موجودة!")
-            
+    else:
+        st.error(f"الدفعة {batch_number} غير موجودة!")
+                
       
     
 
