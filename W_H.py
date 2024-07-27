@@ -53,26 +53,7 @@ def load_logs():
     except FileNotFoundError:
         logs_receving = []
 
-    try:
-        logs_confirmation = pd.read_csv('logs_confirmation.csv').to_dict('records')
-    except FileNotFoundError:
-        logs_confirmation = []
-    
-    try:
-        logs_rejection = pd.read_csv('logs_rejection.csv').to_dict('records')
-    except FileNotFoundError:
-        logs_rejection = []
-
-    st.session_state.logs_confirmation = logs_confirmation
-    st.session_state.logs_rejection = logs_rejection
-
-    st.write("سجلات التأكيد:")
-    st.dataframe(pd.DataFrame(logs_confirmation))
-
-    st.write("سجلات الرفض:")
-    st.dataframe(pd.DataFrame(logs_rejection))
-
-    return logs_location, logs_receving,logs_rejection,logs_confirmation
+    return logs_location, logs_receving
 
 # Login function
 def login(username, password):
