@@ -217,6 +217,12 @@ def display_batch_details_and_confirmation():
                 logs_df = pd.DataFrame(st.session_state.logs)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
                 st.experimental_rerun()
+                if 'Batch No' in batch_df.columns:
+                    st.dataframe(
+                        batch_df.style.applymap(highlight_confirmed, subset=['Batch No'])
+                    )
+                else:
+                    st.error("العمود 'Batch No' غير موجود في البيانات.")
         else:
             st.error(f"الدفعة {batch_number} غير موجودة!")
 
