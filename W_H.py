@@ -186,8 +186,10 @@ def on_quantity_change():
 def display_batch_details_and_confirmation():
     st.header("Confirm or reject the batch")
     
-    # الحصول على اسم المستخدم من النظام
-    user_name = os.getlogin()
+    # الحصول على اسم المستخدم من المتغيرات البيئية
+    user_name = os.getenv('USER') or os.getenv('USERNAME')
+    if not user_name:
+        user_name = "Unknown User"
     st.write(f"Current user: {user_name}")
     
     try:
@@ -250,6 +252,7 @@ def display_batch_details_and_confirmation():
         st.header("Change Log")
         df_log = pd.read_csv(log_file)
         st.dataframe(df_log)
+
 users = load_users()
 
 
