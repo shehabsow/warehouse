@@ -183,22 +183,25 @@ def on_quantity_change():
 
 # Function to display batch details and confirmation
 def display_batch_details_and_confirmation():
-    st.header("Confirm or reject the patch")
+    st.header("Confirm or reject the batch")
+    
+    # الحصول على اسم المستخدم
+    user_name = st.text_input("Enter your username:")
     
     try:
         df_Receving1 = pd.read_csv('Receving1.csv')
     except FileNotFoundError:
-        st.error("Beach is not available.")
+        st.error("Batch file is not available.")
         return
 
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
-    batch_number = st.selectbox("Choose the patch number:", batch_numbers)
+    batch_number = st.selectbox("Choose the batch number:", batch_numbers)
 
-    if st.button("Show patch"):
+    if st.button("Show batch"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
     
-    if st.button("Confirm the patch"):
+    if st.button("Confirm the batch"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
         
@@ -212,6 +215,22 @@ def display_batch_details_and_confirmation():
         
         df_confirmed.to_csv(confirmed_file, index=False)
         st.success(f"Batch number {batch_number} has been successfully confirmed!")
+        
+        # حفظ السجل في ملف CSV
+        log_file = 'change_log.csv'
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_entry = pd.DataFrame([{
+            'User': user_name,
+            'Timestamp': current_time,
+            'Batch No': batch_number,
+            'Action': 'Confirmed'
+        }])
+        if os.path.exists(log_file):
+            df_log = pd.read_csv(log_file)
+            df_log = pd.concat([df_log, log_entry], ignore_index=True)
+        else:
+            df_log = log_entry
+        df_log.to_csv(log_file, index=False)
 
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
     confirmed_file = 'confirmed_batches.csv'
@@ -222,21 +241,13 @@ def display_batch_details_and_confirmation():
 
     csv = df_confirmed.to_csv(index=False)
     st.download_button(label="Download updated sheet", data=csv, file_name='df_confirmed.csv', mime='text/csv')
-    st.header("Clear file content CSV")
-    file_to_clear = st.selectbox("اSelect the CSV file to scan:", ["none", "Receving1.csv", "confirmed_batches.csv"])
-
-    if st.button("Clear file content"):
-        if file_to_clear != "none":
-            if os.path.exists(file_to_clear):
-                # إنشاء DataFrame فارغ بنفس الهيكل
-                df_empty = pd.DataFrame(columns=pd.read_csv(file_to_clear).columns)
-                df_empty.to_csv(file_to_clear, index=False)
-                st.success(f"The contents of the file {file_to_clear} were successfully cleared!")
-            else:
-                st.error(f"The file {file_to_clear} does not exist.")
-        else:
-            st.error("Please select a file to scan.")
-
+    
+    # عرض سجل التغييرات
+    log_file = 'change_log.csv'
+    if os.path.exists(log_file):
+        st.header("Change Log")
+        df_log = pd.read_csv(log_file)
+        st.dataframe(df_log)
 users = load_users()
 
 
