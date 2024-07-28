@@ -237,26 +237,7 @@ def display_batch_details_and_confirmation():
         logs_df.to_csv('logs_confirmation.csv', index=False)
         
         # حفظ السجل في ملف CSV
-        log_file = 'change_log.csv'
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = {
-            'user': user_name,
-            'time': current_time,
-            'Batch Number': batch_number,
-            'Quantity': batch_df['Quantity'].sum(),
-            'BIN1': batch_df['BIN1'].iloc[0] if 'BIN1' in batch_df.columns else '',
-            'QTY1': batch_df['QTY1'].sum() if 'QTY1' in batch_df.columns else 0,
-            'BIN2': batch_df['BIN2'].iloc[0] if 'BIN2' in batch_df.columns else '',
-            'QTY2': batch_df['QTY2'].sum() if 'QTY2' in batch_df.columns else 0,
-            'BIN3': batch_df['BIN3'].iloc[0] if 'BIN3' in batch_df.columns else '',
-            'QTY3': batch_df['QTY3'].sum() if 'QTY3' in batch_df.columns else 0
-        }
-        if 'logs' not in st.session_state:
-            st.session_state.logs = []
-        st.session_state.logs.append(log_entry)
-        logs_df = pd.DataFrame(st.session_state.logs)
-        logs_df.to_csv(log_file, index=False)
-
+        
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
     confirmed_file = 'confirmed_batches.csv'
     if os.path.exists(confirmed_file):
