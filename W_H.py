@@ -447,7 +447,7 @@ else:
 
     elif page == 'Batch Confirmation':   
         def main():
-            display_batch_details_and_confirmation()
+            display_batch_details_and_confirmation(username,Batch_No)
             if st.button('Clear Logs'):
                     
                 try:
