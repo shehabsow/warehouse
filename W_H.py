@@ -249,12 +249,7 @@ def display_batch_details_and_confirmation():
     st.download_button(label="Download updated sheet", data=csv, file_name='df_confirmed.csv', mime='text/csv')
     
     # عرض سجل التغييرات
-    log_file = 'change_log.csv'
-    if os.path.exists(log_file):
-        st.header("Change Log")
-        logs_df = pd.read_csv(log_file)
-        st.dataframe(logs_df)
-users = load_users()
+ 
 
 
 if 'logged_in' not in st.session_state:
