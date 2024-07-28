@@ -182,7 +182,7 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 # Function to display batch details and confirmation
-
+users = load_users()
 username = os.getenv('user') or os.getenv('username')
 if not username:
     username = "Unknown User"
