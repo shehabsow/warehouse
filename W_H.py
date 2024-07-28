@@ -211,7 +211,7 @@ def display_batch_details_and_confirmation():
             df_confirmed = batch_df
         
         df_confirmed.to_csv(confirmed_file, index=False)
-        st.success(f"Batch number {batch number} has been successfully confirmed!")
+        st.success(f"Batch number {batch_number} has been successfully confirmed!")
 
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
     confirmed_file = 'confirmed_batches.csv'
