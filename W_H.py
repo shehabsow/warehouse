@@ -235,7 +235,31 @@ def display_batch_details_and_confirmation():
         st.session_state.logs_confirmation.append(log_entry)
         logs_df = pd.DataFrame(st.session_state.logs_confirmation)
         logs_df.to_csv('logs_confirmation.csv', index=False)
+
+    if st.button("Reject the batch"):
+        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightred', subset=['Batch No']))
         
+        # حفظ الدفعة المؤكدة في ملف CSV جديد أو تحديث الملف الحالي
+        Reject_file = 'Reject_batches.csv'
+        if os.path.exists(Reject_file):
+            df_Reject = pd.read_csv(Reject_file)
+            df_Reject = pd.concat([df_Reject, batch_df], ignore_index=True).drop_duplicates()
+        else:
+            df_Reject = batch_df
+        
+        df_Reject.to_csv(Reject_file, index=False)
+        st.success(f"Batch number {batch_number} has been successfully confirmed!")
+        log_entry = {
+            'user': st.session_state.username,
+            'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+            'Batch No': batch_number,
+            'status': 'confirmed'
+        }
+        st.session_state.logs_confirmation.append(log_entry)
+        logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+        logs_df.to_csv('logs_confirmation.csv', index=False)
+
         # حفظ السجل في ملف CSV
         
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
