@@ -91,7 +91,7 @@ def login(username, password):
 
 # Update password function
 def update_password(username, new_password, confirm_new_password):
-     users = load_users()
+    users = load_users()
     if new_password == confirm_new_password:
         users[username]["password"] = new_password
         users[username]["first_login"] = False
