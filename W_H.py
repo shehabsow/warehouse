@@ -182,7 +182,7 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 # Function to display batch details and confirmation
-def display_batch_details_and_confirmation(username,Batch_No):
+def display_batch_details_and_confirmation():
     st.header("Confirm or reject the patch")
     
     try:
@@ -447,7 +447,7 @@ else:
 
     elif page == 'Batch Confirmation':   
         def main():
-            display_batch_details_and_confirmation(username,Batch_No)
+            display_batch_details_and_confirmation()
             if st.button('Clear Logs'):
                     
                 try:
