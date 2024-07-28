@@ -254,7 +254,7 @@ def display_batch_details_and_confirmation():
             'user': st.session_state.username,
             'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
             'Batch No': batch_number,
-            'status': 'confirmed'
+            'status': 'Reject'
         }
         st.session_state.logs_confirmation.append(log_entry)
         logs_df = pd.DataFrame(st.session_state.logs_confirmation)
