@@ -237,19 +237,6 @@ def display_batch_details_and_confirmation():
         else:
             st.error("Please select a file to scan.")
 
-    log_entry = {
-        'user': username,
-        'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-        'Batch No': Batch_No}
-      
-    st.session_state.logs_confirmation.append(log_entry)
-    logs_df = pd.DataFrame(st.session_state.logs_confirmation)
-    logs_df.to_csv('logs_confirmation.csv', index=False)
-     
-   
-    
-
-
 users = load_users()
 
 
