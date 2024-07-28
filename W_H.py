@@ -183,14 +183,20 @@ def on_quantity_change():
 
 # Function to display batch details and confirmation
 
+username = os.getenv('user') or os.getenv('username')
+if not username:
+    username = "Unknown User"
+
+# التحقق من وجود المستخدم
+if username in users:
+    user_name = users[username]['name']
+    st.write(f"Current user: {user_name}")
+else:
+    st.error("User not found. Please enter a valid username.")
+    st.stop()
+
 def display_batch_details_and_confirmation():
     st.header("Confirm or reject the batch")
-    
-    # الحصول على اسم المستخدم من المتغيرات البيئية
-    user_name = os.getenv('USER') or os.getenv('USERNAME')
-    if not user_name:
-        user_name = "Unknown User"
-    st.write(f"Current user: {user_name}")
     
     try:
         df_Receving1 = pd.read_csv('Receving1.csv')
@@ -223,18 +229,23 @@ def display_batch_details_and_confirmation():
         # حفظ السجل في ملف CSV
         log_file = 'change_log.csv'
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = pd.DataFrame([{
-            'User': user_name,
-            'Timestamp': current_time,
-            'Batch No': batch_number,
-            'Action': 'Confirmed'
-        }])
-        if os.path.exists(log_file):
-            df_log = pd.read_csv(log_file)
-            df_log = pd.concat([df_log, log_entry], ignore_index=True)
-        else:
-            df_log = log_entry
-        df_log.to_csv(log_file, index=False)
+        log_entry = {
+            'user': user_name,
+            'time': current_time,
+            'Batch Number': batch_number,
+            'Quantity': batch_df['Quantity'].sum(),
+            'BIN1': batch_df['BIN1'].iloc[0] if 'BIN1' in batch_df.columns else '',
+            'QTY1': batch_df['QTY1'].sum() if 'QTY1' in batch_df.columns else 0,
+            'BIN2': batch_df['BIN2'].iloc[0] if 'BIN2' in batch_df.columns else '',
+            'QTY2': batch_df['QTY2'].sum() if 'QTY2' in batch_df.columns else 0,
+            'BIN3': batch_df['BIN3'].iloc[0] if 'BIN3' in batch_df.columns else '',
+            'QTY3': batch_df['QTY3'].sum() if 'QTY3' in batch_df.columns else 0
+        }
+        if 'logs' not in st.session_state:
+            st.session_state.logs = []
+        st.session_state.logs.append(log_entry)
+        logs_df = pd.DataFrame(st.session_state.logs)
+        logs_df.to_csv(log_file, index=False)
 
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
     confirmed_file = 'confirmed_batches.csv'
@@ -250,9 +261,8 @@ def display_batch_details_and_confirmation():
     log_file = 'change_log.csv'
     if os.path.exists(log_file):
         st.header("Change Log")
-        df_log = pd.read_csv(log_file)
-        st.dataframe(df_log)
-
+        logs_df = pd.read_csv(log_file)
+        st.dataframe(logs_df)
 users = load_users()
 
 
