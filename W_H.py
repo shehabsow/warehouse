@@ -183,22 +183,22 @@ def on_quantity_change():
 
 # Function to display batch details and confirmation
 def display_batch_details_and_confirmation():
-    st.header("تأكيد أو رفض الدفعة")
+    st.header("Confirm or reject the patch")
     
     try:
         df_Receving1 = pd.read_csv('Receving1.csv')
     except FileNotFoundError:
-        st.error("ملف الدفعات غير موجود.")
+        st.error("Beach is not available.")
         return
 
     batch_numbers = df_Receving1['Batch No'].unique().tolist()
-    batch_number = st.selectbox("اختر رقم الدفعة:", batch_numbers)
+    batch_number = st.selectbox("Choose the patch number:", batch_numbers)
 
-    if st.button("عرض الدفعة"):
+    if st.button("Show patch"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df)
     
-    if st.button("تأكيد الدفعة"):
+    if st.button("Confirm the patch"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
         
@@ -211,31 +211,31 @@ def display_batch_details_and_confirmation():
             df_confirmed = batch_df
         
         df_confirmed.to_csv(confirmed_file, index=False)
-        st.success(f"تم تأكيد الدفعة {batch_number} بنجاح!")
+        st.success(f"Batch number {batch number} has been successfully confirmed!")
 
     # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
     confirmed_file = 'confirmed_batches.csv'
     if os.path.exists(confirmed_file):
-        st.header("الدفعات المؤكدة")
+        st.header("Confirmed batches")
         df_confirmed = pd.read_csv(confirmed_file)
         st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
 
     csv = df_confirmed.to_csv(index=False)
     st.download_button(label="Download updated sheet", data=csv, file_name='df_confirmed.csv', mime='text/csv')
-    st.header("مسح محتوى ملف CSV")
-    file_to_clear = st.selectbox("اختر ملف CSV لمسحه:", ["none", "Receving1.csv", "confirmed_batches.csv"])
+    st.header("Clear file content CSV")
+    file_to_clear = st.selectbox("اSelect the CSV file to scan:", ["none", "Receving1.csv", "confirmed_batches.csv"])
 
-    if st.button("مسح محتوى الملف"):
+    if st.button("Clear file content"):
         if file_to_clear != "none":
             if os.path.exists(file_to_clear):
                 # إنشاء DataFrame فارغ بنفس الهيكل
                 df_empty = pd.DataFrame(columns=pd.read_csv(file_to_clear).columns)
                 df_empty.to_csv(file_to_clear, index=False)
-                st.success(f"تم مسح محتوى الملف {file_to_clear} بنجاح!")
+                st.success(f"The contents of the file {file_to_clear} were successfully cleared!")
             else:
-                st.error(f"الملف {file_to_clear} غير موجود.")
+                st.error(f"The file {file_to_clear} does not exist.")
         else:
-            st.error("يرجى اختيار ملف لمسحه.")
+            st.error("Please select a file to scan.")
    
     
 
