@@ -182,11 +182,13 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 # Function to display batch details and confirmation
+
 def display_batch_details_and_confirmation():
     st.header("Confirm or reject the batch")
     
-    # الحصول على اسم المستخدم
-    user_name = st.text_input("Enter your username:")
+    # الحصول على اسم المستخدم من النظام
+    user_name = os.getlogin()
+    st.write(f"Current user: {user_name}")
     
     try:
         df_Receving1 = pd.read_csv('Receving1.csv')
