@@ -183,7 +183,7 @@ def on_quantity_change():
 
 # Function to display batch details and confirmation
 users = load_users()
-username = os.getenv('user') or os.getenv('username')
+username = os.getenv('USER') or os.getenv('USERNAME')
 if not username:
     username = "Unknown User"
 
