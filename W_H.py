@@ -251,7 +251,7 @@ def display_batch_details_and_confirmation():
     # عرض سجل التغييرات
  
 
-
+users = load_users()
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.logs_location, st.session_state.logs_receving1,st.session_state.logs_confirmation = load_logs()
