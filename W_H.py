@@ -59,9 +59,24 @@ def load_logs():
         logs_confirmation = []
 
     return logs_location, logs_receving,logs_confirmation
-
+    
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+if 'first_login' not in st.session_state:
+    st.session_state.first_login = False
+if 'password_expired' not in st.session_state:
+    st.session_state.password_expired = False
+if 'username' not in st.session_state:
+    st.session_state.username = ''
+if 'logs_location' not in st.session_state:
+    st.session_state.logs_location = []
+if 'logs_receiving' not in st.session_state:
+    st.session_state.logs_receiving = []
+if 'logs_confirmation' not in st.session_state:
+    st.session_state.logs_confirmation = []
 # Login function
 def login(username, password):
+    users = load_users()
     if username in users and users[username]["password"] == password:
         st.session_state.logged_in = True
         st.session_state.username = username
@@ -76,6 +91,7 @@ def login(username, password):
 
 # Update password function
 def update_password(username, new_password, confirm_new_password):
+     users = load_users()
     if new_password == confirm_new_password:
         users[username]["password"] = new_password
         users[username]["first_login"] = False
@@ -181,19 +197,7 @@ def on_quantity_change():
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
 
-# Function to display batch details and confirmation
 
-username = os.getenv('USER') or os.getenv('USERNAME')
-if not username:
-    username = "Unknown User"
-
-# التحقق من وجود المستخدم
-if username in users:
-    user_name = users[username]['name']
-    st.write(f"Current user: {user_name}")
-else:
-    st.error("User not found. Please enter a valid username.")
-    st.stop()
 
 def display_batch_details_and_confirmation():
     st.header("Confirm or reject the batch")
@@ -204,12 +208,9 @@ def display_batch_details_and_confirmation():
         st.error("Batch file is not available.")
         return
 
-    batch_numbers = df_Receving1['Batch No'].unique().tolist()
-    batch_number = st.selectbox("Choose the batch number:", batch_numbers)
-
-    if st.button("Show batch"):
-        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
-        st.dataframe(batch_df)
+    batch_number = st.selectbox("Select a batch number", df_Receving1['Batch No'].unique())
+    batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+    st.dataframe(batch_df)
     
     if st.button("Confirm the batch"):
         batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
@@ -225,6 +226,15 @@ def display_batch_details_and_confirmation():
         
         df_confirmed.to_csv(confirmed_file, index=False)
         st.success(f"Batch number {batch_number} has been successfully confirmed!")
+        log_entry = {
+            'user': st.session_state.username,
+            'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+            'Batch No': batch_number,
+            'status': 'confirmed'
+        }
+        st.session_state.logs_confirmation.append(log_entry)
+        logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+        logs_df.to_csv('logs_confirmation.csv', index=False)
         
         # حفظ السجل في ملف CSV
         log_file = 'change_log.csv'
