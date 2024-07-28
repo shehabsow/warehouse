@@ -182,7 +182,7 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 # Function to display batch details and confirmation
-def display_batch_details_and_confirmation():
+def display_batch_details_and_confirmation(username,Batch_No):
     st.header("Confirm or reject the patch")
     
     try:
@@ -236,6 +236,16 @@ def display_batch_details_and_confirmation():
                 st.error(f"The file {file_to_clear} does not exist.")
         else:
             st.error("Please select a file to scan.")
+
+    log_entry = {
+        'user': username,
+        'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+        'Batch No': Batch_No}
+      
+    st.session_state.logs_confirmation.append(log_entry)
+    logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+    logs_df.to_csv('logs_confirmation.csv', index=False)
+     
    
     
 
