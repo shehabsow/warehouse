@@ -433,7 +433,7 @@ else:
                     clear_logs("location")
             else:
                 st.write("No location logs available.")
-
+            st.subheader("confirmation Logs")
             if st.session_state.get('logs_confirmation', []):
                 logs_df = pd.DataFrame(st.session_state.logs_confirmation)
                 st.dataframe(logs_df)
@@ -447,15 +447,7 @@ else:
     elif page == 'Batch Confirmation':   
         def main():
             display_batch_details_and_confirmation()
-            if st.button('Clear Logs'):
-                    
-                try:
-                    os.remove('df_BIN.csv')
-                except FileNotFoundError:
-                    pass
-                st.success("Logs cleared successfully!")
-            else:
-                st.write("No logs available.")
+    
         if __name__ == '__main__':
             main()
             
