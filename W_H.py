@@ -327,6 +327,8 @@ else:
         st.session_state.logs_receving = logs_df.to_dict('records')
     except FileNotFoundError:
         st.session_state.logs_receving= []
+
+    
     
     # Display options
     page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs","Batch Confirmation"])
