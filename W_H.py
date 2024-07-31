@@ -327,7 +327,13 @@ else:
             st.session_state.logs_receving = logs_df.to_dict('records')
         except FileNotFoundError:
             st.session_state.logs_receving= []
-    
+
+        try:
+            logs_df = pd.read_csv('logs_confirmation.csv')
+            st.session_state.logs_confirmation = logs_df.to_dict('records')
+        except FileNotFoundError:
+            st.session_state.logs_confirmation= []
+        
         
         
         # Display options
@@ -459,6 +465,7 @@ else:
                         clear_logs("location")
                 else:
                     st.write("No location logs available.")
+                    
                 st.subheader("confirmation Logs")
                 if st.session_state.get('logs_confirmation', []):
                     logs_df = pd.DataFrame(st.session_state.logs_confirmation)
