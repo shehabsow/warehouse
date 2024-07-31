@@ -303,177 +303,177 @@ else:
         st.markdown(f"<div style='text-align: right; font-size: 20px; color: green;'> Login by : {users[st.session_state.username]['name']}</div>", unsafe_allow_html=True)
 
         # Load data frames
-    if 'df' not in st.session_state:
-        st.session_state.df = df_Material = pd.read_csv('matril.csv')
-    try:
-        df_BIN = pd.read_csv('LOCATION.csv')
-    except FileNotFoundError:
-        df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator",
-                                    'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
-    
-    try:
-        df_Receving1 = pd.read_csv('Receving1.csv')
-    except FileNotFoundError:
-        df_Receving1 = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
-    
-    try:
-        logs_df = pd.read_csv('logs_location.csv')
-        st.session_state.logs_location = logs_df.to_dict('records')
-    except FileNotFoundError:
-        st.session_state.logs_location = []
-    
-    try:
-        logs_df = pd.read_csv('logs_receving.csv')
-        st.session_state.logs_receving = logs_df.to_dict('records')
-    except FileNotFoundError:
-        st.session_state.logs_receving= []
-
-    
-    
-    # Display options
-    page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs","Batch Confirmation"])
-    
-    if page == 'Add New Batch':
+        if 'df' not in st.session_state:
+            st.session_state.df = df_Material = pd.read_csv('matril.csv')
+        try:
+            df_BIN = pd.read_csv('LOCATION.csv')
+        except FileNotFoundError:
+            df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator",
+                                        'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
         
-        def main():
-            col1, col2 = st.columns([2, 0.75])
-            with col1:
-                st.markdown("""
-                    <h2 style='text-align: center; font-size: 40px; color: black;'>
-                        Add New Batch
-                    </h2>
-                """, unsafe_allow_html=True)
-            col1, col2, col3, col4, col5= st.columns([3, 2, 1.5, 1.5, 1.5])
-            with col1:
-                Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                st.text(f"Item Code: {Item_Code}")
-            with col2:
-                Batch_No = st.text_input('Batch No:')
-                Date = st.date_input('Date:')
-            with col3:
-                QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
-            with col4:
-                Delivered_by = st.text_input('Delivered by:')
-            with col5:
-                Received_by = st.text_input('Received by:')
+        try:
+            df_Receving1 = pd.read_csv('Receving1.csv')
+        except FileNotFoundError:
+            df_Receving1 = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
+        
+        try:
+            logs_df = pd.read_csv('logs_location.csv')
+            st.session_state.logs_location = logs_df.to_dict('records')
+        except FileNotFoundError:
+            st.session_state.logs_location = []
+        
+        try:
+            logs_df = pd.read_csv('logs_receving.csv')
+            st.session_state.logs_receving = logs_df.to_dict('records')
+        except FileNotFoundError:
+            st.session_state.logs_receving= []
+    
+        
+        
+        # Display options
+        page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs","Batch Confirmation"])
+        
+        if page == 'Add New Batch':
             
-            
-            # Display packaging results
-            st.text(f"Pallets: {st.session_state.get('pallets', '')}")
-            st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
-            st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
-            st.dataframe(df_Receving1)
-            if st.button("Add Batch"):
-                add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
-                st.write('## Updated Items')
+            def main():
+                col1, col2 = st.columns([2, 0.75])
+                with col1:
+                    st.markdown("""
+                        <h2 style='text-align: center; font-size: 40px; color: black;'>
+                            Add New Batch
+                        </h2>
+                    """, unsafe_allow_html=True)
+                col1, col2, col3, col4, col5= st.columns([3, 2, 1.5, 1.5, 1.5])
+                with col1:
+                    Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                    st.text(f"Item Code: {Item_Code}")
+                with col2:
+                    Batch_No = st.text_input('Batch No:')
+                    Date = st.date_input('Date:')
+                with col3:
+                    QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
+                with col4:
+                    Delivered_by = st.text_input('Delivered by:')
+                with col5:
+                    Received_by = st.text_input('Received by:')
+                
+                
+                # Display packaging results
+                st.text(f"Pallets: {st.session_state.get('pallets', '')}")
+                st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
+                st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
                 st.dataframe(df_Receving1)
-            csv = df_Receving1.to_csv(index=False)
-            st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
-                     
-        if __name__ == '__main__':
-            main()
-    
-    
-    elif page == "FINISHED GOODS BIN LOCATION SHEET":
-        def main():
-            col1, col2 = st.columns([2, 0.75])
-            with col1:
-                st.markdown("""
-                    <h2 style='text-align: center; font-size: 40px; color: black;'>
-                        FINISHED GOODS BIN LOCATION SHEET
-                    </h2>
-                """, unsafe_allow_html=True)
-            col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
-            with col1:
-                Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                st.text(f"Item Code: {Item_Code}")
-            with col2:
-                Batch_Number = st.text_input('Batch Number:')
-                Date = st.date_input('Date:')
-            with col3:
-                Warehouse_Operator = st.text_input('Warehouse Operator:')
-            with col4:
-                Quantity = st.text_input('Quantity:')
-            with col5:
-                BIN1 = st.text_input('BIN1:')
-                QTY1 = st.text_input('QTY1:')
-            with col6:
-                BIN2 = st.text_input('BIN2:')
-                QTY2 = st.text_input('QTY2:')
-                BIN3 = st.text_input('BIN3:')
-                QTY3 = st.text_input('QTY3:')
-
-            if st.button("Add Location"):
-                add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
-                st.write('## Updated Items')
-                st.dataframe(df_BIN)
-            csv = df_BIN.to_csv(index=False)
-            st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+                if st.button("Add Batch"):
+                    add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
+                    st.write('## Updated Items')
+                    st.dataframe(df_Receving1)
+                csv = df_Receving1.to_csv(index=False)
+                st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
+                         
+            if __name__ == '__main__':
+                main()
         
-    
-        if __name__ == '__main__':
-            main()
-    
-    elif page == "Logs":
-        def clear_logs(log_type):
-            if log_type == "receiving":
-                st.session_state.logs_receving = []
-                if os.path.exists('logs_receving.csv'):
-                    os.remove('logs_receving.csv')
-                st.success("Receiving logs cleared successfully!")
-            elif log_type == "location":
-                st.session_state.logs_location = []
-                if os.path.exists('logs_location.csv'):
-                    os.remove('logs_location.csv')
-                st.success("Location logs cleared successfully!")
-
-        def main():
-            col1, col2 = st.columns([2, 0.75])
-            with col1:
-                st.markdown("""
-                    <h2 style='text-align: center; font-size: 40px; color: black;'>
-                        View Logs
-                    </h2>
-                """, unsafe_allow_html=True)
-            
-            st.subheader("Receiving Logs")
-            if st.session_state.get('logs_receving', []):
-                logs_df = pd.DataFrame(st.session_state.logs_receving)
-                st.dataframe(logs_df)
-                csv = logs_df.to_csv(index=False)
-                st.download_button(label="Download Logs as CSV", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
-                if st.button("Clear Receiving Logs"):
-                    clear_logs("receiving")
-            else:
-                st.write("No receiving logs available.")
-            
-            st.subheader("Location Logs")
-            if st.session_state.get('logs_location', []):
-                logs_df = pd.DataFrame(st.session_state.logs_location)
-                st.dataframe(logs_df)
-                csv = logs_df.to_csv(index=False)
-                st.download_button(label="Download Logs as CSV", data=csv, file_name='location_logs.csv', mime='text/csv')
-                if st.button("Clear Location Logs"):
-                    clear_logs("location")
-            else:
-                st.write("No location logs available.")
-            st.subheader("confirmation Logs")
-            if st.session_state.get('logs_confirmation', []):
-                logs_df = pd.DataFrame(st.session_state.logs_confirmation)
-                st.dataframe(logs_df)
-                csv = logs_df.to_csv(index=False)
-                st.download_button(label="Download Logs as CSV", data=csv, file_name='logs_confirmation.csv', mime='text/csv')
         
-        if __name__ == '__main__':
-            main()
-
-
-    elif page == 'Batch Confirmation':   
-        def main():
-            display_batch_details_and_confirmation()
+        elif page == "FINISHED GOODS BIN LOCATION SHEET":
+            def main():
+                col1, col2 = st.columns([2, 0.75])
+                with col1:
+                    st.markdown("""
+                        <h2 style='text-align: center; font-size: 40px; color: black;'>
+                            FINISHED GOODS BIN LOCATION SHEET
+                        </h2>
+                    """, unsafe_allow_html=True)
+                col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+                with col1:
+                    Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
+                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
+                    st.text(f"Item Code: {Item_Code}")
+                with col2:
+                    Batch_Number = st.text_input('Batch Number:')
+                    Date = st.date_input('Date:')
+                with col3:
+                    Warehouse_Operator = st.text_input('Warehouse Operator:')
+                with col4:
+                    Quantity = st.text_input('Quantity:')
+                with col5:
+                    BIN1 = st.text_input('BIN1:')
+                    QTY1 = st.text_input('QTY1:')
+                with col6:
+                    BIN2 = st.text_input('BIN2:')
+                    QTY2 = st.text_input('QTY2:')
+                    BIN3 = st.text_input('BIN3:')
+                    QTY3 = st.text_input('QTY3:')
     
-        if __name__ == '__main__':
-            main()
+                if st.button("Add Location"):
+                    add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                    st.write('## Updated Items')
+                    st.dataframe(df_BIN)
+                csv = df_BIN.to_csv(index=False)
+                st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
             
+        
+            if __name__ == '__main__':
+                main()
+        
+        elif page == "Logs":
+            def clear_logs(log_type):
+                if log_type == "receiving":
+                    st.session_state.logs_receving = []
+                    if os.path.exists('logs_receving.csv'):
+                        os.remove('logs_receving.csv')
+                    st.success("Receiving logs cleared successfully!")
+                elif log_type == "location":
+                    st.session_state.logs_location = []
+                    if os.path.exists('logs_location.csv'):
+                        os.remove('logs_location.csv')
+                    st.success("Location logs cleared successfully!")
+    
+            def main():
+                col1, col2 = st.columns([2, 0.75])
+                with col1:
+                    st.markdown("""
+                        <h2 style='text-align: center; font-size: 40px; color: black;'>
+                            View Logs
+                        </h2>
+                    """, unsafe_allow_html=True)
+                
+                st.subheader("Receiving Logs")
+                if st.session_state.get('logs_receving', []):
+                    logs_df = pd.DataFrame(st.session_state.logs_receving)
+                    st.dataframe(logs_df)
+                    csv = logs_df.to_csv(index=False)
+                    st.download_button(label="Download Logs as CSV", data=csv, file_name='user_logs_receving.csv', mime='text/csv')
+                    if st.button("Clear Receiving Logs"):
+                        clear_logs("receiving")
+                else:
+                    st.write("No receiving logs available.")
+                
+                st.subheader("Location Logs")
+                if st.session_state.get('logs_location', []):
+                    logs_df = pd.DataFrame(st.session_state.logs_location)
+                    st.dataframe(logs_df)
+                    csv = logs_df.to_csv(index=False)
+                    st.download_button(label="Download Logs as CSV", data=csv, file_name='location_logs.csv', mime='text/csv')
+                    if st.button("Clear Location Logs"):
+                        clear_logs("location")
+                else:
+                    st.write("No location logs available.")
+                st.subheader("confirmation Logs")
+                if st.session_state.get('logs_confirmation', []):
+                    logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+                    st.dataframe(logs_df)
+                    csv = logs_df.to_csv(index=False)
+                    st.download_button(label="Download Logs as CSV", data=csv, file_name='logs_confirmation.csv', mime='text/csv')
+            
+            if __name__ == '__main__':
+                main()
+    
+    
+        elif page == 'Batch Confirmation':   
+            def main():
+                display_batch_details_and_confirmation()
+        
+            if __name__ == '__main__':
+                main()
+                
