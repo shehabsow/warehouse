@@ -200,7 +200,7 @@ def on_quantity_change():
 
 
 def display_batch_details_and_confirmation():
-    st.header("Confirm or reject the batch")
+    st.header("Confirm or Reject the Batch")
     
     try:
         df_Receving1 = pd.read_csv('Receving1.csv')
@@ -213,10 +213,8 @@ def display_batch_details_and_confirmation():
     st.dataframe(batch_df)
     
     if st.button("Confirm the batch"):
-        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
         st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
         
-        # حفظ الدفعة المؤكدة في ملف CSV جديد أو تحديث الملف الحالي
         confirmed_file = 'confirmed_batches.csv'
         if os.path.exists(confirmed_file):
             df_confirmed = pd.read_csv(confirmed_file)
@@ -237,40 +235,54 @@ def display_batch_details_and_confirmation():
         logs_df.to_csv('logs_confirmation.csv', index=False)
 
     if st.button("Reject the batch"):
-        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
-        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightred', subset=['Batch No']))
+        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
         
-        # حفظ الدفعة المؤكدة في ملف CSV جديد أو تحديث الملف الحالي
-        Reject_file = 'Reject_batches.csv'
-        if os.path.exists(Reject_file):
-            df_Reject = pd.read_csv(Reject_file)
-            df_Reject = pd.concat([df_Reject, batch_df], ignore_index=True).drop_duplicates()
+        reject_file = 'reject_batches.csv'
+        if os.path.exists(reject_file):
+            df_reject = pd.read_csv(reject_file)
+            df_reject = pd.concat([df_reject, batch_df], ignore_index=True).drop_duplicates()
         else:
-            df_Reject = batch_df
+            df_reject = batch_df
         
-        df_Reject.to_csv(Reject_file, index=False)
-        st.success(f"Batch number {batch_number} has been successfully confirmed!")
+        df_reject.to_csv(reject_file, index=False)
+        st.success(f"Batch number {batch_number} has been successfully rejected!")
         log_entry = {
             'user': st.session_state.username,
             'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
             'Batch No': batch_number,
-            'status': 'Reject'
+            'status': 'rejected'
         }
         st.session_state.logs_confirmation.append(log_entry)
         logs_df = pd.DataFrame(st.session_state.logs_confirmation)
         logs_df.to_csv('logs_confirmation.csv', index=False)
 
-        # حفظ السجل في ملف CSV
-        
-    # عرض جميع الدفعات المؤكدة دائمًا على شاشة الويب
+    st.header("Confirmed Batches")
     confirmed_file = 'confirmed_batches.csv'
     if os.path.exists(confirmed_file):
-        st.header("Confirmed batches")
         df_confirmed = pd.read_csv(confirmed_file)
         st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
+        
+        csv_confirmed = df_confirmed.to_csv(index=False)
+        st.download_button(
+            label="Download Confirmed Batches",
+            data=csv_confirmed,
+            file_name='confirmed_batches.csv',
+            mime='text/csv'
+        )
 
-    csv = df_confirmed.to_csv(index=False)
-    st.download_button(label="Download updated sheet", data=csv, file_name='df_confirmed.csv', mime='text/csv')
+    st.header("Rejected Batches")
+    reject_file = 'reject_batches.csv'
+    if os.path.exists(reject_file):
+        df_reject = pd.read_csv(reject_file)
+        st.dataframe(df_reject.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
+        
+        csv_reject = df_reject.to_csv(index=False)
+        st.download_button(
+            label="Download Rejected Batches",
+            data=csv_reject,
+            file_name='rejected_batches.csv',
+            mime='text/csv'
+        )
     
     # عرض سجل التغييرات
  
