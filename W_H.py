@@ -353,11 +353,12 @@ else:
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    st.markdown(f"<div style='font-size: 20px; color: blue;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
                     QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
-                    st.text(f"Pallets: {st.session_state.get('pallets', '')}")
-                    st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
-                    st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
+                  
                 with col2:
                     Batch_No = st.text_input('Batch No:')
                     Date = st.date_input('Date:')
@@ -390,9 +391,8 @@ else:
                 col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
-                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    
-                    st.markdown(f"<div style='font-size: 20px; color: blue;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
+                    Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]  
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
                 with col2:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
