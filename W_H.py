@@ -392,7 +392,7 @@ else:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
                     
-                    st.markdown(f"<div style='font-size: 20px; color: blue;'>Item Code: {Item Code}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: blue;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
                 with col2:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
