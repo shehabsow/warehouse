@@ -353,7 +353,7 @@ else:
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    st.text(f"Item Code: {Item_Code}")
+                    st.text(f"item Code: {Item_Code}")
                     QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
                     st.text(f"Pallets: {st.session_state.get('pallets', '')}")
                     st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
