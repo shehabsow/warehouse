@@ -349,7 +349,7 @@ else:
                             Add New Batch
                         </h2>
                     """, unsafe_allow_html=True)
-                col1, col2, col3, col4, col5= st.columns([3, 2, 1.5, 1.5, 1.5])
+                col1, col2, col3= st.columns([3, 2, 1.5])
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
@@ -362,11 +362,9 @@ else:
                     Batch_No = st.text_input('Batch No:')
                     Date = st.date_input('Date:')
                 with col3:
-                    
-                with col4:
                     Delivered_by = st.text_input('Delivered by:')
-                with col5:
                     Received_by = st.text_input('Received by:')
+            
               
                 st.dataframe(df_Receving1)
                 if st.button("Add Batch"):
