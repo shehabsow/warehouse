@@ -354,24 +354,20 @@ else:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
                     st.text(f"Item Code: {Item_Code}")
-                with col2:
-                    Batch_No = st.text_input('Batch No:')
-                    Date = st.date_input('Date:')
-                with col3:
                     QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
                     st.text(f"Pallets: {st.session_state.get('pallets', '')}")
                     st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
                     st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
+                with col2:
+                    Batch_No = st.text_input('Batch No:')
+                    Date = st.date_input('Date:')
+                with col3:
+                    
                 with col4:
                     Delivered_by = st.text_input('Delivered by:')
                 with col5:
                     Received_by = st.text_input('Received by:')
-                
-                
-                # Display packaging results
-                st.text(f"Pallets: {st.session_state.get('pallets', '')}")
-                st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
-                st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
+              
                 st.dataframe(df_Receving1)
                 if st.button("Add Batch"):
                     add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
