@@ -102,15 +102,35 @@ def update_password(username, new_password, confirm_new_password):
         st.success("Password updated successfully!")
     else:
         st.error("Passwords do not match!")
-        
+
+
+def calculate_packag(total_boxes):
+    cartons_per_pallet = 12
+    boxes_per_carton = 240
+
+    cartons = total_boxes // boxes_per_carton
+    boxes_left = total_boxes % boxes_per_carton
+
+    pallets = cartons // cartons_per_pallet
+    cartons_left = cartons % cartons_per_pallet
+
+    return pallets, cartons_left, boxes_left
 
 # Function to add new location
 def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
     global df_BIN
+    try:
+        Quantity_int = int(Quantity)
+    except ValueError:
+        st.error("The quantity must be a valid integer.")
+        return
+
+    pallets, cartons, boxes = calculate_packag(Quantity)
     new_row = {
         'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
         "Warehouse Operator": Warehouse_Operator, 'Quantity': Quantity, 'Date': Date,
         'BIN1': BIN1, 'QTY1': QTY1, 'BIN2': BIN2, 'QTY2': QTY2, 'BIN3': BIN3, 'QTY3': QTY3
+        ,'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
     df_BIN.to_csv('LOCATION.csv', index=False)
@@ -125,11 +145,21 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
         'BIN2': BIN2,
         'QTY2': QTY2,
         'BIN3': BIN3,
-        'QTY3': QTY3
+        'QTY3': QTY3,
+        'Pallets': pallets,
+        'Cartons': cartons,
+        'Boxes': boxes,
     }
     st.session_state.logs_location.append(log_entry)
     logs_df = pd.DataFrame(st.session_state.logs_location)
     logs_df.to_csv('logs_location.csv', index=False)
+
+def on_quantity():
+    try:
+        Quantity_int = int(st.session_state['Quantity_int'])
+        st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packag(Quantity_int)
+    except ValueError:
+        st.error("Please enter a valid number for QTY pack.")
 
 # Function to calculate packaging
 def calculate_packaging(total_boxes):
@@ -353,7 +383,7 @@ else:
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]
-                    st.markdown(f"<div style='font-size: 20px; color: green;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: red;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
                     QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
@@ -392,14 +422,18 @@ else:
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]  
-                    st.markdown(f"<div style='font-size: 20px; color: green;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: red;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
                 with col2:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
                 with col3:
                     Warehouse_Operator = st.text_input('Warehouse Operator:')
                 with col4:
-                    Quantity = st.text_input('Quantity:')
+                    
+                    Quantity = st.text_input('QTY pack:', key='Quantity', on_change=on_quantity)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
                 with col5:
                     BIN1 = st.text_input('BIN1:')
                     QTY1 = st.text_input('QTY1:')
