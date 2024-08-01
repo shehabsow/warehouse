@@ -359,6 +359,9 @@ else:
                     Date = st.date_input('Date:')
                 with col3:
                     QTY_pack = st.text_input('QTY pack:', key='QTY_pack', on_change=on_quantity_change)
+                    st.text(f"Pallets: {st.session_state.get('pallets', '')}")
+                    st.text(f"Cartons Left: {st.session_state.get('cartons_left', '')}")
+                    st.text(f"Boxes Left: {st.session_state.get('boxes_left', '')}")
                 with col4:
                     Delivered_by = st.text_input('Delivered by:')
                 with col5:
