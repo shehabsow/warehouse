@@ -156,7 +156,7 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
 
 def on_quantity():
     try:
-        Quantity_int = int(st.session_state['Quantity_int'])
+        Quantity_int = int(st.session_state['Quantity'])
         st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packag(Quantity_int)
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
