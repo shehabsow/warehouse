@@ -125,7 +125,7 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
         st.error("The quantity must be a valid integer.")
         return
 
-    pallets, cartons, boxes = calculate_packag(Quantity)
+    pallets, cartons, boxes = calculate_packag(Quantity_int)
     new_row = {
         'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
         "Warehouse Operator": Warehouse_Operator, 'Quantity': Quantity, 'Date': Date,
