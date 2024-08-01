@@ -102,19 +102,7 @@ def update_password(username, new_password, confirm_new_password):
         st.success("Password updated successfully!")
     else:
         st.error("Passwords do not match!")
-
-# Function to add new location
-def update_password(username, new_password, confirm_new_password):
-    if new_password == confirm_new_password:
-        users[username]["password"] = new_password
-        users[username]["first_login"] = False
-        users[username]["last_password_update"] = str(datetime.now(egypt_tz))
-        save_users(users)
-        st.session_state.first_login = False
-        st.session_state.password_expired = False
-        st.success("Password updated successfully!")
-    else:
-        st.error("Passwords do not match!")
+        
 
 # Function to add new location
 def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
