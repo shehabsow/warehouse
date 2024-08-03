@@ -382,7 +382,7 @@ else:
                     Received_by = st.text_input('Received by:')
             
               
-                st.dataframe(df_Receving1)
+                
                 if st.button("Add Batch"):
                     add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
                     st.write('## Updated Items')
