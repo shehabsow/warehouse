@@ -25,23 +25,22 @@ def load_users():
         with open('users.json', 'r') as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
+        now = str(datetime.now(egypt_tz))
         return {
-            "knhp322": {"password": "knhp322", "first_login": True, "name": "Shehab Ayman", "last_password_update": str(datetime.now(egypt_tz))},
-            "karm": {"password": "karm", "first_login": True, "name": "karm", "last_password_update": str(datetime.now(egypt_tz))},
-            "kxsv748": {"password": "kxsv748", "first_login": True, "name": "Mohamed El masry", "last_password_update": str(datetime.now(egypt_tz))},
-            "kvwp553": {"password": "kvwp553", "first_login": True, "name": "sameh", "last_password_update": str(datetime.now(egypt_tz))},
-            "knfb489": {"password": "knfb489", "first_login": True, "name": "Yasser Hassan", "last_password_update": str(datetime.now(egypt_tz))},
-            "kjjd308": {"password": "kjjd308", "first_login": True, "name": "Kaleed", "last_password_update": str(datetime.now(egypt_tz))},
-            "kibx268": {"password": "kibx268", "first_login": True, "name": "Zeinab Mobarak", "last_password_update": str(datetime.now(egypt_tz))},
-            "engy": {"password": "1234", "first_login": True, "name": "D.Engy", "last_password_update": str(datetime.now(egypt_tz))}
+            "knhp322": {"password": "knhp322", "first_login": True, "name": "Shehab Ayman", "last_password_update": now},
+            "karm": {"password": "karm", "first_login": True, "name": "karm", "last_password_update": now},
+            "kxsv748": {"password": "kxsv748", "first_login": True, "name": "Mohamed El masry", "last_password_update": now},
+            "kvwp553": {"password": "kvwp553", "first_login": True, "name": "sameh", "last_password_update": now},
+            "knfb489": {"password": "knfb489", "first_login": True, "name": "Yasser Hassan", "last_password_update": now},
+            "kjjd308": {"password": "kjjd308", "first_login": True, "name": "Kaleed", "last_password_update": now},
+            "kibx268": {"password": "kibx268", "first_login": True, "name": "Zeinab Mobarak", "last_password_update": now},
+            "engy": {"password": "1234", "first_login": True, "name": "D.Engy", "last_password_update": now}
         }
 
-# Save users data to JSON file
 def save_users(users):
     with open('users.json', 'w') as f:
-        json.dump(users, f)
+        json.dump(users, f, indent=4)
 
-# Load logs from files
 def load_logs():
     try:
         logs_location = pd.read_csv('logs_location.csv').to_dict('records')
@@ -58,8 +57,8 @@ def load_logs():
     except FileNotFoundError:
         logs_confirmation = []
 
-    return logs_location, logs_receving,logs_confirmation
-    
+    return logs_location, logs_receving, logs_confirmation
+
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'first_login' not in st.session_state:
@@ -69,12 +68,8 @@ if 'password_expired' not in st.session_state:
 if 'username' not in st.session_state:
     st.session_state.username = ''
 if 'logs_location' not in st.session_state:
-    st.session_state.logs_location = []
-if 'logs_receiving' not in st.session_state:
-    st.session_state.logs_receiving = []
-if 'logs_confirmation' not in st.session_state:
-    st.session_state.logs_confirmation = []
-# Login function
+    st.session_state.logs_location, st.session_state.logs_receving, st.session_state.logs_confirmation = load_logs()
+
 def login(username, password):
     users = load_users()
     if username in users and users[username]["password"] == password:
@@ -89,7 +84,6 @@ def login(username, password):
     else:
         st.error("Incorrect username or password")
 
-# Update password function
 def update_password(username, new_password, confirm_new_password):
     users = load_users()
     if new_password == confirm_new_password:
@@ -103,7 +97,6 @@ def update_password(username, new_password, confirm_new_password):
     else:
         st.error("Passwords do not match!")
 
-
 def calculate_packag(total_boxes):
     cartons_per_pallet = 12
     boxes_per_carton = 240
@@ -116,7 +109,6 @@ def calculate_packag(total_boxes):
 
     return pallets, cartons_left, boxes_left
 
-# Function to add new location
 def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
     global df_BIN
     try:
@@ -129,8 +121,8 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
     new_row = {
         'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
         "Warehouse Operator": Warehouse_Operator, 'Quantity': Quantity, 'Date': Date,
-        'BIN1': BIN1, 'QTY1': QTY1, 'BIN2': BIN2, 'QTY2': QTY2, 'BIN3': BIN3, 'QTY3': QTY3
-        ,'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
+        'BIN1': BIN1, 'QTY1': QTY1, 'BIN2': BIN2, 'QTY2': QTY2, 'BIN3': BIN3, 'QTY3': QTY3,
+        'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
     df_BIN.to_csv('LOCATION.csv', index=False)
@@ -161,7 +153,6 @@ def on_quantity():
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
 
-# Function to calculate packaging
 def calculate_packaging(total_boxes):
     cartons_per_pallet = 12
     boxes_per_carton = 240
@@ -174,7 +165,6 @@ def calculate_packaging(total_boxes):
 
     return pallets, cartons_left, boxes_left
 
-# Function to add new batch
 def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by):
     global df_Receving1
     try:
@@ -207,15 +197,12 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
     logs_df = pd.DataFrame(st.session_state.logs_receving)
     logs_df.to_csv('logs_receving.csv', index=False)
 
-# Handle quantity change
 def on_quantity_change():
     try:
         qty_pack = int(st.session_state['QTY_pack'])
         st.session_state['pallets'], st.session_state['cartons_left'], st.session_state['boxes_left'] = calculate_packaging(qty_pack)
     except ValueError:
         st.error("Please enter a valid number for QTY pack.")
-
-
 
 def display_batch_details_and_confirmation():
     st.header("Confirm or Reject the Batch")
@@ -301,14 +288,13 @@ def display_batch_details_and_confirmation():
             file_name='rejected_batches.csv',
             mime='text/csv'
         )
-    
-    # عرض سجل التغييرات
- 
 
 users = load_users()
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
-    st.session_state.logs_location, st.session_state.logs_receving1,st.session_state.logs_confirmation = load_logs()
+    st.session_state.logs_location, st.session_state.logs_receving, st.session_state.logs_confirmation = load_logs()
+if 'logs' not in st.session_state:
+    st.session_state.logs = load_logs()[0]
 
 if not st.session_state.logged_in:
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -332,14 +318,13 @@ else:
     else:
         st.markdown(f"<div style='text-align: right; font-size: 20px; color: green;'> Login by : {users[st.session_state.username]['name']}</div>", unsafe_allow_html=True)
 
-        # Load data frames
         if 'df' not in st.session_state:
             st.session_state.df = df_Material = pd.read_csv('matril.csv')
         try:
             df_BIN = pd.read_csv('LOCATION.csv')
         except FileNotFoundError:
             df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator",
-                                        'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
+                                            'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
         
         try:
             df_Receving1 = pd.read_csv('Receving1.csv')
@@ -356,13 +341,13 @@ else:
             logs_df = pd.read_csv('logs_receving.csv')
             st.session_state.logs_receving = logs_df.to_dict('records')
         except FileNotFoundError:
-            st.session_state.logs_receving= []
+            st.session_state.logs_receving = []
 
         try:
             logs_df = pd.read_csv('logs_confirmation.csv')
             st.session_state.logs_confirmation = logs_df.to_dict('records')
         except FileNotFoundError:
-            st.session_state.logs_confirmation= []
+            st.session_state.logs_confirmation = []
         
         
         
