@@ -386,7 +386,7 @@ else:
                 if st.button("Add Batch"):
                     add_new_Batch(st.session_state.username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by)
                     st.write('## Updated Items')
-                    st.dataframe(df_Receving1)
+                st.dataframe(df_Receving1)
                 csv = df_Receving1.to_csv(index=False)
                 st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
                          
