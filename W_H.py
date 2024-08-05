@@ -291,33 +291,7 @@ def display_batch_details_and_confirmation():
             logs_df.to_csv('logs_confirmation.csv', index=False)
 
 
-    st.header("Confirmed Batches")
-    confirmed_file = 'confirmed_batches.csv'
-    if os.path.exists(confirmed_file):
-        df_confirmed = pd.read_csv(confirmed_file)
-        st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
         
-        csv_confirmed = df_confirmed.to_csv(index=False)
-        st.download_button(
-            label="Download Confirmed Batches",
-            data=csv_confirmed,
-            file_name='confirmed_batches.csv',
-            mime='text/csv'
-        )
-
-    st.header("Rejected Batches")
-    reject_file = 'reject_batches.csv'
-    if os.path.exists(reject_file):
-        df_reject = pd.read_csv(reject_file)
-        st.dataframe(df_reject.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
-        
-        csv_reject = df_reject.to_csv(index=False)
-        st.download_button(
-            label="Download Rejected Batches",
-            data=csv_reject,
-            file_name='rejected_batches.csv',
-            mime='text/csv'
-        )
 
 users = load_users()
 if 'logged_in' not in st.session_state:
