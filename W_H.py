@@ -180,7 +180,7 @@ def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, D
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_Receving1 = df_Receving1.append(new_row, ignore_index=True)
-    df_Receving1.to_csv('Receving1.csv', index=False)
+    df_Receving1.to_csv('Receving.csv', index=False)
     st.success(f"New item '{Batch_No}' added successfully with quantity {QTY_pack}!")
     log_entry = {
         'user': username,
@@ -327,7 +327,7 @@ else:
                                             'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
         
         try:
-            df_Receving1 = pd.read_csv('Receving1.csv')
+            df_Receving1 = pd.read_csv('Receving.csv')
         except FileNotFoundError:
             df_Receving1 = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
         
@@ -388,7 +388,7 @@ else:
                     st.write('## Updated Items')
                 st.dataframe(df_Receving1)
                 csv = df_Receving1.to_csv(index=False)
-                st.download_button(label="Download updated sheet", data=csv, file_name='df_Receving1.csv', mime='text/csv')
+                st.download_button(label="Download updated sheet", data=csv, file_name='Receving.csv', mime='text/csv')
                          
             if __name__ == '__main__':
                 main()
