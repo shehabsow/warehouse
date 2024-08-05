@@ -433,7 +433,7 @@ else:
                     st.write('## Updated Items')
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
-                st.download_button(label="Download updated sheet", data=csv, file_name='updated_spare_parts.csv', mime='text/csv')
+                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION.csv', mime='text/csv')
             
         
             if __name__ == '__main__':
