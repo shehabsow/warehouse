@@ -205,61 +205,91 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 def display_batch_details_and_confirmation():
-    st.header("Confirm or Reject the Batch")
-    
-    try:
-        df_Receving1 = pd.read_csv('Receving.csv')
-    except FileNotFoundError:
-        st.error("Batch file is not available.")
-        return
+    st.header("Confirmed Batches")
+    confirmed_file = 'confirmed_batches.csv'
+    if os.path.exists(confirmed_file):
+        df_confirmed = pd.read_csv(confirmed_file)
+        st.dataframe(df_confirmed.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
+        
+        csv_confirmed = df_confirmed.to_csv(index=False)
+        st.download_button(
+            label="Download Confirmed Batches",
+            data=csv_confirmed,
+            file_name='confirmed_batches.csv',
+            mime='text/csv'
+        )
 
-    batch_number = st.selectbox("Select a batch number", df_Receving1['Batch No'].unique())
-    batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
-    st.dataframe(batch_df)
-    
-    if st.button("Confirm the batch"):
-        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
+    st.header("Rejected Batches")
+    reject_file = 'reject_batches.csv'
+    if os.path.exists(reject_file):
+        df_reject = pd.read_csv(reject_file)
+        st.dataframe(df_reject.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
         
-        confirmed_file = 'confirmed_batches.csv'
-        if os.path.exists(confirmed_file):
-            df_confirmed = pd.read_csv(confirmed_file)
-            df_confirmed = pd.concat([df_confirmed, batch_df], ignore_index=True).drop_duplicates()
-        else:
-            df_confirmed = batch_df
+        csv_reject = df_reject.to_csv(index=False)
+        st.download_button(
+            label="Download Rejected Batches",
+            data=csv_reject,
+            file_name='rejected_batches.csv',
+            mime='text/csv'
+        )
         
-        df_confirmed.to_csv(confirmed_file, index=False)
-        st.success(f"Batch number {batch_number} has been successfully confirmed!")
-        log_entry = {
-            'user': st.session_state.username,
-            'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-            'Batch No': batch_number,
-            'status': 'confirmed'
-        }
-        st.session_state.logs_confirmation.append(log_entry)
-        logs_df = pd.DataFrame(st.session_state.logs_confirmation)
-        logs_df.to_csv('logs_confirmation.csv', index=False)
+    if st.session_state.username == "manager":  # Replace "manager" with the actual username you want to give special access
+        st.header("Confirm or Reject the Batch")
 
-    if st.button("Reject the batch"):
-        st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
-        
-        reject_file = 'reject_batches.csv'
-        if os.path.exists(reject_file):
-            df_reject = pd.read_csv(reject_file)
-            df_reject = pd.concat([df_reject, batch_df], ignore_index=True).drop_duplicates()
-        else:
-            df_reject = batch_df
-        
-        df_reject.to_csv(reject_file, index=False)
-        st.success(f"Batch number {batch_number} has been successfully rejected!")
-        log_entry = {
-            'user': st.session_state.username,
-            'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
-            'Batch No': batch_number,
-            'status': 'rejected'
-        }
-        st.session_state.logs_confirmation.append(log_entry)
-        logs_df = pd.DataFrame(st.session_state.logs_confirmation)
-        logs_df.to_csv('logs_confirmation.csv', index=False)
+        try:
+            df_Receving1 = pd.read_csv('Receving.csv')
+        except FileNotFoundError:
+            st.error("Batch file is not available.")
+            return
+
+        batch_number = st.selectbox("Select a batch number", df_Receving1['Batch No'].unique())
+        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+        st.dataframe(batch_df)
+
+        if st.button("Confirm the batch"):
+            st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
+
+            confirmed_file = 'confirmed_batches.csv'
+            if os.path.exists(confirmed_file):
+                df_confirmed = pd.read_csv(confirmed_file)
+                df_confirmed = pd.concat([df_confirmed, batch_df], ignore_index=True).drop_duplicates()
+            else:
+                df_confirmed = batch_df
+
+            df_confirmed.to_csv(confirmed_file, index=False)
+            st.success(f"Batch number {batch_number} has been successfully confirmed!")
+            log_entry = {
+                'user': st.session_state.username,
+                'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+                'Batch No': batch_number,
+                'status': 'confirmed'
+            }
+            st.session_state.logs_confirmation.append(log_entry)
+            logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+            logs_df.to_csv('logs_confirmation.csv', index=False)
+
+        if st.button("Reject the batch"):
+            st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
+
+            reject_file = 'reject_batches.csv'
+            if os.path.exists(reject_file):
+                df_reject = pd.read_csv(reject_file)
+                df_reject = pd.concat([df_reject, batch_df], ignore_index=True).drop_duplicates()
+            else:
+                df_reject = batch_df
+
+            df_reject.to_csv(reject_file, index=False)
+            st.success(f"Batch number {batch_number} has been successfully rejected!")
+            log_entry = {
+                'user': st.session_state.username,
+                'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
+                'Batch No': batch_number,
+                'status': 'rejected'
+            }
+            st.session_state.logs_confirmation.append(log_entry)
+            logs_df = pd.DataFrame(st.session_state.logs_confirmation)
+            logs_df.to_csv('logs_confirmation.csv', index=False)
+
 
     st.header("Confirmed Batches")
     confirmed_file = 'confirmed_batches.csv'
