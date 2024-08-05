@@ -109,6 +109,22 @@ def calculate_packag(total_boxes):
 
     return pallets, cartons_left, boxes_left
 
+def save_and_push_changes(file_path, commit_message):
+    try:
+        repo_dir = os.path.dirname(file_path)
+        repo = git.Repo(repo_dir)
+        
+        # إضافة التعديلات إلى Git
+        repo.git.add(file_path)
+        repo.index.commit(commit_message)
+        origin = repo.remote(name='origin')
+        origin.push()
+        st.success("Changes have been successfully pushed to GitHub!")
+    except git.exc.GitCommandError as git_error:
+        st.error(f"Git command error: {str(git_error)}")
+    except Exception as e:
+        st.error(f"An error occurred while pushing changes to GitHub: {str(e)}")
+
 def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
     global df_BIN
     try:
@@ -125,8 +141,12 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
-    df_BIN.to_csv('LOCATION.csv', index=False)
+    # حفظ التعديلات إلى ملف CSV
+    file_path = 'LOCATION.csv'
+    df_BIN.to_csv(file_path, index=False)
+    
     st.success(f"New item '{Batch_Number}' added successfully with quantity {Quantity}!")
+    
     log_entry = {
         'user': username,
         'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
@@ -145,6 +165,9 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
     st.session_state.logs_location.append(log_entry)
     logs_df = pd.DataFrame(st.session_state.logs_location)
     logs_df.to_csv('logs_location.csv', index=False)
+    save_and_push_changes(file_path, 'Updated LOCATION.csv with new data')
+
+    st.success(f"New item '{Batch_Number}' added successfully with quantity {Quantity}!")
 
 def on_quantity():
     try:
