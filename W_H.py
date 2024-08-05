@@ -142,7 +142,7 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
     # حفظ التعديلات إلى ملف CSV
-    file_path = 'LOCATION.csv'
+    file_path = 'https://github.com/shehabsow/warehouse/blob/main/LOCATION.csv'
     df_BIN.to_csv(file_path, index=False)
     
     st.success(f"New item '{Batch_Number}' added successfully with quantity {Quantity}!")
