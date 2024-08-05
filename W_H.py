@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import json
 import csv
 import os
-
+import git
 st.set_page_config(
     layout="wide",
     page_title='warehouse',
@@ -233,7 +233,7 @@ def display_batch_details_and_confirmation():
             mime='text/csv'
         )
         
-    if st.session_state.username == "knhp322":  # Replace "manager" with the actual username you want to give special access
+    if st.session_state.username == "karm":  # Replace "manager" with the actual username you want to give special access
         st.header("Confirm or Reject the Batch")
 
         try:
