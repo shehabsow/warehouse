@@ -208,7 +208,7 @@ def display_batch_details_and_confirmation():
     st.header("Confirm or Reject the Batch")
     
     try:
-        df_Receving1 = pd.read_csv('Receving1.csv')
+        df_Receving1 = pd.read_csv('Receving.csv')
     except FileNotFoundError:
         st.error("Batch file is not available.")
         return
