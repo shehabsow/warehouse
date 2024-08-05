@@ -233,7 +233,7 @@ def display_batch_details_and_confirmation():
             mime='text/csv'
         )
         
-    if st.session_state.username == "knfb489":  # Replace "manager" with the actual username you want to give special access
+    if st.session_state.username == "knhp322":  # Replace "manager" with the actual username you want to give special access
         st.header("Confirm or Reject the Batch")
 
         try:
