@@ -16,8 +16,8 @@ st.set_page_config(
 
 egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
-#df_BIN = pd.read_csv('LOCATION.csv')
-#df_Receving = pd.read_csv('Receving.csv')
+df_BIN = pd.read_csv('LOCATION.csv')
+df_Receving = pd.read_csv('Receving.csv')
 
 # Load users data
 def load_users():
