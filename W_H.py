@@ -457,7 +457,29 @@ else:
                 col1, col2,col3= st.columns([1,1,1])
                 with col1:
                     BIN1 = st.text_input('BIN1:')
-                    QTY1 = st.text_input('QTY1:')   
+                    BIN2 = st.text_input('BIN2:')
+                    BIN3 = st.text_input('BIN3:')
+                    BIN4 = st.text_input('BIN4:')
+                    BIN5 = st.text_input('BIN5:')
+                    BIN6 = st.text_input('BIN6:')
+                    BIN7 = st.text_input('BIN7:')
+                    BIN8 = st.text_input('BIN8:')
+                    BIN9 = st.text_input('BIN9:')
+                    BIN10 = st.text_input('BIN10:')
+                with col2:
+                    QTY1 = st.text_input('QTY1:')
+                    QTY2 = st.text_input('QTY2:')
+                    QTY3 = st.text_input('QTY3:')
+                    QTY4 = st.text_input('QTY4:')
+                    QTY5 = st.text_input('QTY5:')
+                    QTY6 = st.text_input('QTY6:')
+                    QTY7 = st.text_input('QTY7:')
+                    QTY8 = st.text_input('QTY8:')
+                    QTY9 = st.text_input('QTY9:')
+                    QTY10 = st.text_input('QTY10:')
+                    
+
+                with col3:
                
     
                 if st.button("Add Location"):
