@@ -109,8 +109,8 @@ def calculate_packag(total_boxes):
 
     return pallets, cartons_left, boxes_left
 
-def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, username):
-    global df_BIN
+def add_new_location(product_name, item_code, batch_number, quantity, date, bins, quantities, username):
+
     try:
         Quantity_int = int(Quantity)
     except ValueError:
@@ -132,12 +132,8 @@ def add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, 
         'time': datetime.now(egypt_tz).strftime('%Y-%m-%d %H:%M:%S'),
         'Batch Number': Batch_Number,
         'Quantity': Quantity,
-        'BIN1': BIN1,
-        'QTY1': QTY1,
-        'BIN2': BIN2,
-        'QTY2': QTY2,
-        'BIN3': BIN3,
-        'QTY3': QTY3,
+        'BINs': [', '.join(bins)],  # تحويل قائمة BINS إلى سلسلة نصية
+        'QTYs': [', '.join(quantities)],
         'Pallets': pallets,
         'Cartons': cartons,
         'Boxes': boxes,
@@ -454,76 +450,35 @@ else:
                     )
                 st.session_state.refreshed = True
         
-                col1, col2,col3,col4= st.columns([1,1,1,1])
+                col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+    
+    # قوائم لتخزين قيم BINS و QTYs المدخلة
+                bins = []
+                quantities = []
+            
+                # إدخال القيم في الأعمدة
                 with col1:
-                    BIN1 = st.text_input('BIN1:')
-                    BIN2 = st.text_input('BIN2:')
-                    BIN3 = st.text_input('BIN3:')
-                    BIN4 = st.text_input('BIN4:')
-                    BIN5 = st.text_input('BIN5:')
-                    BIN6 = st.text_input('BIN6:')
-                    BIN7 = st.text_input('BIN7:')
-                    BIN8 = st.text_input('BIN8:')
-                    BIN9 = st.text_input('BIN9:')
-                    BIN10 = st.text_input('BIN10:')
-                    BIN11 = st.text_input('BIN11:')
-                    BIN12 = st.text_input('BIN12:')
-                    BIN13 = st.text_input('BIN13:')
-                    BIN14 = st.text_input('BIN14:')
-                    BIN15 = st.text_input('BIN15:')
-                with col2:
-                    QTY1 = st.text_input('QTY1:')
-                    QTY2 = st.text_input('QTY2:')
-                    QTY3 = st.text_input('QTY3:')
-                    QTY4 = st.text_input('QTY4:')
-                    QTY5 = st.text_input('QTY5:')
-                    QTY6 = st.text_input('QTY6:')
-                    QTY7 = st.text_input('QTY7:')
-                    QTY8 = st.text_input('QTY8:')
-                    QTY9 = st.text_input('QTY9:')
-                    QTY10 = st.text_input('QTY10:')
-                    QTY11 = st.text_input('QTY11:')
-                    QTY12 = st.text_input('QTY12:')
-                    QTY13 = st.text_input('QTY13:')
-                    QTY14 = st.text_input('QTY14:')
-                    QTY15 = st.text_input('QTY15:')
-
+                    for i in range(1, 16):
+                        bin_value = st.text_input(f'BIN{i}:')
+                        qty_value = st.text_input(f'QTY{i}:')
+                        if bin_value:
+                            bins.append(bin_value)
+                        if qty_value:
+                            quantities.append(qty_value)
+            
                 with col3:
-                    BIN16 = st.text_input('BIN16:')
-                    BIN17 = st.text_input('BIN17:')
-                    BIN18 = st.text_input('BIN18:')
-                    BIN19 = st.text_input('BIN19:')
-                    BIN20 = st.text_input('BIN20:')
-                    BIN21 = st.text_input('BIN21:')
-                    BIN22 = st.text_input('BIN22:')
-                    BIN23 = st.text_input('BIN23:')
-                    BIN24 = st.text_input('BIN24:')
-                    BIN25 = st.text_input('BIN25:')
-                    BIN26 = st.text_input('BIN26:')
-                    BIN27 = st.text_input('BIN27:')
-                    BIN28 = st.text_input('BIN28:')
-                    BIN29 = st.text_input('BIN29:')
-                    BIN30 = st.text_input('BIN30:')
-                with col4:
-                    QTY16 = st.text_input('QTY16:')
-                    QTY17 = st.text_input('QTY17:')
-                    QTY18 = st.text_input('QTY18:')
-                    QTY19 = st.text_input('QTY19:')
-                    QTY20 = st.text_input('QTY20:')
-                    QTY21 = st.text_input('QTY21:')
-                    QTY22 = st.text_input('QTY22:')
-                    QTY23 = st.text_input('QTY23:')
-                    QTY24 = st.text_input('QTY24:')
-                    QTY25 = st.text_input('QTY25:')
-                    QTY26 = st.text_input('QTY26:')
-                    QTY27 = st.text_input('QTY27:')
-                    QTY28 = st.text_input('QTY28:')
-                    QTY29 = st.text_input('QTY29:')
-                    QTY30 = st.text_input('QTY30:')
-                
+                    for i in range(16, 31):
+                        bin_value = st.text_input(f'BIN{i}:')
+                        qty_value = st.text_input(f'QTY{i}:')
+                        if bin_value:
+                            bins.append(bin_value)
+                        if qty_value:
+                            quantities.append(qty_value)
+            
                 if st.button("Add Location"):
-                    add_new_LOCATION(Product_Name, Item_Code, Batch_Number,  Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                    add_new_location(product_name, item_code, batch_number, quantity, date, bins, quantities, st.session_state.username)
                     st.write('## Updated Items')
+                
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
                 st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION.csv', mime='text/csv')
