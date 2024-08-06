@@ -357,7 +357,7 @@ else:
         
         
         # Display options
-        page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET", "Logs","Batch Confirmation"])
+        page = st.sidebar.radio("Select page", [ "Add New Batch","FINISHED GOODS BIN LOCATION SHEET","Batch Confirmation", "Logs"])
         
         if page == 'Add New Batch':
             
