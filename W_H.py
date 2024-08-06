@@ -166,7 +166,7 @@ def calculate_packaging(total_boxes):
     return pallets, cartons_left, boxes_left
 
 def add_new_Batch(username, Product_Name, Batch_No, Item_Code, QTY_pack, Date, Delivered_by, Received_by):
-    global df_Receving1
+    global df_Receving
     try:
         QTY_pack_int = int(QTY_pack)
     except ValueError:
@@ -237,13 +237,13 @@ def display_batch_details_and_confirmation():
         st.header("Confirm or Reject the Batch")
 
         try:
-            df_Receving1 = pd.read_csv('Receving.csv')
+            df_Receving = pd.read_csv('Receving.csv')
         except FileNotFoundError:
             st.error("Batch file is not available.")
             return
 
-        batch_number = st.selectbox("Select a batch number", df_Receving1['Batch No'].unique())
-        batch_df = df_Receving1[df_Receving1['Batch No'] == batch_number]
+        batch_number = st.selectbox("Select a batch number", df_Receving['Batch No'].unique())
+        batch_df = df_Receving[df_Receving['Batch No'] == batch_number]
         st.dataframe(batch_df)
 
         if st.button("Confirm the batch"):
@@ -332,7 +332,7 @@ else:
                                             'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
         
         try:
-            df_Receving1 = pd.read_csv('Receving.csv')
+            df_Receving = pd.read_csv('Receving.csv')
         except FileNotFoundError:
             df_Receving1 = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
         
@@ -428,11 +428,11 @@ else:
                     search_button = st.button("Search")
                     search_option  = 'All Columns'
                 
-                def search_in_dataframe(df_BIN, keyword, option):
+                def search_in_dataframe(df_Receving, keyword, option):
                     if option == 'All Columns':
-                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                        result = df_Receving[df_Receving.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
                     else:
-                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
+                        result = df_Receving[df_Receving[option].astype(str).str.contains(keyword, case=False)]
                     return result
                 
                 if st.session_state.get('refreshed', False):
