@@ -475,11 +475,12 @@ else:
                             bins.append(bin_value)
 
                 with col4:
-                    for i in range((11, 21):
+                    for i in range(11, 21):
                         qty_value = st.text_input(f'QTY{i}:')
                         if qty_value:
                             quantities.append(qty_value)
-            
+
+                
                 if st.button("Add Location"):
                     add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
                     st.write('## Updated Items')
