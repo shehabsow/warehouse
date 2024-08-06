@@ -477,11 +477,7 @@ else:
                     QTY8 = st.text_input('QTY8:')
                     QTY9 = st.text_input('QTY9:')
                     QTY10 = st.text_input('QTY10:')
-                    
-
-                with col3:
-               
-    
+                
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
                     st.write('## Updated Items')
