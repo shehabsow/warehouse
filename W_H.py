@@ -125,7 +125,7 @@ def add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
-    df_BIN.to_csv('LOCATION.csv', index=False)
+    df_BIN.to_csv('LOCATION (1).csv', index=False)
     st.success(f"New item '{Batch_Number}' added successfully with quantity {Quantity}!")
     log_entry = {
         'user': username,
