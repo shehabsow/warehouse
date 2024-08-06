@@ -474,7 +474,7 @@ else:
                         if bin_value:
                             bins.append(bin_value)
 
-                with col4
+                with col4:
                     for i in range(21,31):
                         qty_value = st.text_input(f'QTY{i}:')
                         if qty_value:
