@@ -110,6 +110,7 @@ def calculate_packag(total_boxes):
     return pallets, cartons_left, boxes_left
 
 def add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, username):
+    global df_BIN
 
     try:
         Quantity_int = int(Quantity)
