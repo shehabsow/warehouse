@@ -423,35 +423,52 @@ else:
                     
 
                 with col3:
-                    st.session_state.df = df_combined
-                    search_keyword = st.session_state.get('search_keyword', '')
-                    search_keyword = st.text_input("Enter keyword to search:", search_keyword)
-                    search_button = st.button("Search")
-                    search_option  = 'All Columns'
-                
-                def search_in_datafram(df_Receving, keyword, option):
-                    if option == 'All Columns':
-                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                    def search_in_datafram(df, keyword, option):
+                        if option == 'All Columns':
+                            result = df[df.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                        else:
+                            result = df[df[option].astype(str).str.contains(keyword, case=False)]
+                        return result
+                    
+                    # تحميل بيانات من ملفات CSV
+                    df_BIN = pd.read_csv('LOCATION.csv')
+                    df_Receving = pd.read_csv('Receving.csv')
+                    
+                    # دمج البيانات في DataFrame واحد
+                    df_combined = pd.concat([df_BIN, df_Receving], ignore_index=True)
+                    
+                    # محاكاة جلسة Streamlit
+                    if 'df' not in st.session_state:
+                        st.session_state.df = df_combined
+                    
+                    # إدخال من المستخدم
+                    search_keyword = st.text_input('Enter search keyword:')
+                    search_option = st.selectbox('Search in:', ['All Columns'] + list(df_combined.columns))
+                    search_button = st.button('Search')
+                    
+                    # التحقق من تحديث الجلسة
+                    if st.session_state.get('refreshed', False):
+                        st.session_state.search_keyword = ''
+                        st.session_state.refreshed = False
+                    
+                    # تنفيذ البحث وعرض النتائج
+                    if search_button and search_keyword:
+                        st.session_state.search_keyword = search_keyword
+                        search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
+                        st.write(f"Search results for '{search_keyword}' in {search_option}:")
+                        st.dataframe(search_results, width=1000, height=200)
+                        st.session_state.refreshed = True
+                    
+                        # إضافة زر لتحميل نتائج البحث كملف CSV
+                        csv = search_results.to_csv(index=False).encode('utf-8')
+                        st.download_button(
+                            label="Download results as CSV",
+                            data=csv,
+                            file_name='search_results.csv',
+                            mime='text/csv'
+                        )
                     else:
-                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
-                    return result
-                
-                if st.session_state.get('refreshed', False):
-                    st.session_state.search_keyword = ''
-                    st.session_state.refreshed = False
-                
-                if search_button and search_keyword:
-                    st.session_state.search_keyword = search_keyword
-                    search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
-                    st.write(f"Search results for '{search_keyword}' in {search_option}:")
-                    st.dataframe(search_results, width=1000, height=200)
-                    csv = search_results.to_csv(index=False).encode('utf-8')
-                    st.download_button(
-                        label="Download results as CSV",
-                        data=csv,
-                        file_name='search_results.csv',
-                        mime='text/csv')
-                st.session_state.refreshed = True 
+                        st.session_state.refreshed = True 
 
                 col1, col2,col3= st.columns([.75,.5,.5])
                 with col1:
