@@ -489,11 +489,6 @@ else:
                     QTY15 = st.text_input('QTY15:')
 
                 with col3:
-                    BIN11 = st.text_input('BIN11:')
-                    BIN12 = st.text_input('BIN12:')
-                    BIN13 = st.text_input('BIN13:')
-                    BIN14 = st.text_input('BIN14:')
-                    BIN15 = st.text_input('BIN15:')
                     BIN16 = st.text_input('BIN16:')
                     BIN17 = st.text_input('BIN17:')
                     BIN18 = st.text_input('BIN18:')
@@ -504,12 +499,12 @@ else:
                     BIN23 = st.text_input('BIN23:')
                     BIN24 = st.text_input('BIN24:')
                     BIN25 = st.text_input('BIN25:')
+                    BIN26 = st.text_input('BIN26:')
+                    BIN27 = st.text_input('BIN27:')
+                    BIN28 = st.text_input('BIN28:')
+                    BIN29 = st.text_input('BIN29:')
+                    BIN30 = st.text_input('BIN30:')
                 with col4:
-                    QTY11 = st.text_input('QTY11:')
-                    QTY12 = st.text_input('QTY12:')
-                    QTY13 = st.text_input('QTY13:')
-                    QTY14 = st.text_input('QTY14:')
-                    QTY15 = st.text_input('QTY15:')
                     QTY16 = st.text_input('QTY16:')
                     QTY17 = st.text_input('QTY17:')
                     QTY18 = st.text_input('QTY18:')
@@ -520,6 +515,11 @@ else:
                     QTY23 = st.text_input('QTY23:')
                     QTY24 = st.text_input('QTY24:')
                     QTY25 = st.text_input('QTY25:')
+                    QTY26 = st.text_input('QTY26:')
+                    QTY27 = st.text_input('QTY27:')
+                    QTY28 = st.text_input('QTY28:')
+                    QTY29 = st.text_input('QTY29:')
+                    QTY30 = st.text_input('QTY30:')
                 
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
