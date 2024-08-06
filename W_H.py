@@ -428,7 +428,7 @@ else:
                     search_button = st.button("Search")
                     search_option  = 'All Columns'
                 
-                def search_in_dataframe(df_Receving, keyword, option):
+                def search_in_datafram(df_Receving, keyword, option):
                     if option == 'All Columns':
                         result = df_Receving[df_Receving.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
                     else:
@@ -441,7 +441,7 @@ else:
                 
                 if search_button and search_keyword:
                     st.session_state.search_keyword = search_keyword
-                    search_results = search_in_dataframe(st.session_state.df, search_keyword, search_option)
+                    search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
                     st.write(f"Search results for '{search_keyword}' in {search_option}:")
                     st.dataframe(search_results, width=1000, height=200)
                 st.session_state.refreshed = True 
