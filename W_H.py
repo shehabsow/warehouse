@@ -458,7 +458,7 @@ else:
             
                 # إدخال القيم في الأعمدة
                 with col1:
-                    for i in range(1, 16):
+                    for i in range(1, 10):
                         bin_value = st.text_input(f'BIN{i}:')
                         qty_value = st.text_input(f'QTY{i}:')
                         if bin_value:
@@ -466,8 +466,17 @@ else:
                         if qty_value:
                             quantities.append(qty_value)
             
+                with col2:
+                    for i in range(10, 20):
+                        bin_value = st.text_input(f'BIN{i}:')
+                        qty_value = st.text_input(f'QTY{i}:')
+                        if bin_value:
+                            bins.append(bin_value)
+                        if qty_value:
+                            quantities.append(qty_value)
+
                 with col3:
-                    for i in range(16, 31):
+                    for i in range(20, 31):
                         bin_value = st.text_input(f'BIN{i}:')
                         qty_value = st.text_input(f'QTY{i}:')
                         if bin_value:
