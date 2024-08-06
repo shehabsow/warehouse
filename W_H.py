@@ -442,9 +442,10 @@ else:
                         st.session_state.df = df_combined
                     
                     # إدخال من المستخدم
-                    search_keyword = st.text_input('Enter search keyword:')
-                    search_option = st.selectbox('Search in:', ['All Columns'] + list(df_combined.columns))
-                    search_button = st.button('Search')
+                    search_keyword = st.session_state.get('search_keyword', '')
+                    search_keyword = st.text_input("Enter keyword to search:", search_keyword)
+                    search_button = st.button("Search")
+                    search_option = 'All Columns'
                     
                     # التحقق من تحديث الجلسة
                     if st.session_state.get('refreshed', False):
