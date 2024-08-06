@@ -109,7 +109,7 @@ def calculate_packag(total_boxes):
 
     return pallets, cartons_left, boxes_left
 
-def add_new_location(Product_Name, item_code, batch_number, quantity, date, bins, quantities, username):
+def add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, username):
 
     try:
         Quantity_int = int(Quantity)
@@ -120,8 +120,7 @@ def add_new_location(Product_Name, item_code, batch_number, quantity, date, bins
     pallets, cartons, boxes = calculate_packag(Quantity_int)
     new_row = {
         'Product Name': Product_Name, 'Item Code': Item_Code, 'Batch Number': Batch_Number,
-        "Warehouse Operator": Warehouse_Operator, 'Quantity': Quantity, 'Date': Date,
-        'BIN1': BIN1, 'QTY1': QTY1, 'BIN2': BIN2, 'QTY2': QTY2, 'BIN3': BIN3, 'QTY3': QTY3,
+       'Quantity': Quantity, 'Date': Date,'bins': bins, 'quantities': quantities,
         'Pallets': pallets, 'Cartons': cartons, 'Boxes': boxes
     }
     df_BIN = df_BIN.append(new_row, ignore_index=True)
@@ -476,7 +475,7 @@ else:
                             quantities.append(qty_value)
             
                 if st.button("Add Location"):
-                    add_new_location(Product_Name, item_code, batch_number, quantity, date, bins, quantities, st.session_state.username)
+                    add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
                     st.write('## Updated Items')
                 
                 st.dataframe(df_BIN)
