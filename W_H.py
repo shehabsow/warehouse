@@ -429,26 +429,28 @@ else:
                     search_button = st.button("Search")
                     search_option  = 'All Columns'
                 
-                    def search_in_datafram(df_Receving, keyword, option):
-                        if option == 'All Columns':
-                            result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
-                        else:
-                            result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
-                        return result
-                    
-                    if st.session_state.get('refreshed', False):
-                        st.session_state.search_keyword = ''
-                        st.session_state.refreshed = False
-                    
-                    if search_button and search_keyword:
-                        st.session_state.search_keyword = search_keyword
-                        search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
-                        st.write(f"Search results for '{search_keyword}' in {search_option}:")
-                        st.dataframe(search_results, width=9000, height=200)
-                    st.session_state.refreshed = True 
+                def search_in_datafram(df_Receving, keyword, option):
+                    if option == 'All Columns':
+                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                    else:
+                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
+                    return result
+                
+                if st.session_state.get('refreshed', False):
+                    st.session_state.search_keyword = ''
+                    st.session_state.refreshed = False
+                
+                if search_button and search_keyword:
+                    st.session_state.search_keyword = search_keyword
+                    search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
+                    st.write(f"Search results for '{search_keyword}' in {search_option}:")
+                    st.dataframe(search_results, width=1000, height=200)
+                st.session_state.refreshed = True 
 
-                BIN1 = st.text_input('BIN1:')
-                QTY1 = st.text_input('QTY1:')   
+                col1, col2,col3= st.columns([.75,.5,.5])
+                with col1:
+                    BIN1 = st.text_input('BIN1:')
+                    QTY1 = st.text_input('QTY1:')   
                
     
                 if st.button("Add Location"):
