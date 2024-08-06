@@ -454,7 +454,7 @@ else:
                     )
                 st.session_state.refreshed = True
         
-                col1, col2,col3,col3= st.columns([1,1,1,1])
+                col1, col2,col3,col4= st.columns([1,1,1,1])
                 with col1:
                     BIN1 = st.text_input('BIN1:')
                     BIN2 = st.text_input('BIN2:')
