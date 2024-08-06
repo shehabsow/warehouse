@@ -522,7 +522,7 @@ else:
                     QTY30 = st.text_input('QTY30:')
                 
                 if st.button("Add Location"):
-                    add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
+                    add_new_LOCATION(Product_Name, Item_Code, Batch_Number,  Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
                     st.write('## Updated Items')
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
