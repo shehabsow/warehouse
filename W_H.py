@@ -417,7 +417,7 @@ else:
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
-                with col3:
+                with col2:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
                     BIN1 = st.text_input('BIN1:')
