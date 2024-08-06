@@ -334,7 +334,7 @@ else:
         try:
             df_Receving = pd.read_csv('Receving.csv')
         except FileNotFoundError:
-            df_Receving1 = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
+            df_Receving = pd.DataFrame(columns=['Product Name', "Batch No", 'Item Code', "QTY pack", "Date", "Delivered by", "Received by"])
         
         try:
             logs_df = pd.read_csv('logs_location.csv')
@@ -423,6 +423,7 @@ else:
                     
 
                 with col3:
+                    st.session_state.df = df_Receving = pd.read_csv('Receving.csv')
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
