@@ -428,11 +428,11 @@ else:
                     search_button = st.button("Search")
                     search_option  = 'All Columns'
                 
-                def search_in_dataframe(df_f, keyword, option):
+                def search_in_dataframe(df_BIN, keyword, option):
                     if option == 'All Columns':
-                        result = df_f[df_f.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
                     else:
-                        result = df_f[df_f[option].astype(str).str.contains(keyword, case=False)]
+                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
                     return result
                 
                 if st.session_state.get('refreshed', False):
