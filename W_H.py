@@ -466,6 +466,11 @@ else:
                     BIN8 = st.text_input('BIN8:')
                     BIN9 = st.text_input('BIN9:')
                     BIN10 = st.text_input('BIN10:')
+                    BIN11 = st.text_input('BIN11:')
+                    BIN12 = st.text_input('BIN12:')
+                    BIN13 = st.text_input('BIN13:')
+                    BIN14 = st.text_input('BIN14:')
+                    BIN15 = st.text_input('BIN15:')
                 with col2:
                     QTY1 = st.text_input('QTY1:')
                     QTY2 = st.text_input('QTY2:')
@@ -477,6 +482,11 @@ else:
                     QTY8 = st.text_input('QTY8:')
                     QTY9 = st.text_input('QTY9:')
                     QTY10 = st.text_input('QTY10:')
+                    QTY11 = st.text_input('QTY11:')
+                    QTY12 = st.text_input('QTY12:')
+                    QTY13 = st.text_input('QTY13:')
+                    QTY14 = st.text_input('QTY14:')
+                    QTY15 = st.text_input('QTY15:')
 
                 with col3:
                     BIN11 = st.text_input('BIN11:')
@@ -489,6 +499,11 @@ else:
                     BIN18 = st.text_input('BIN18:')
                     BIN19 = st.text_input('BIN19:')
                     BIN20 = st.text_input('BIN20:')
+                    BIN21 = st.text_input('BIN21:')
+                    BIN22 = st.text_input('BIN22:')
+                    BIN23 = st.text_input('BIN23:')
+                    BIN24 = st.text_input('BIN24:')
+                    BIN25 = st.text_input('BIN25:')
                 with col4:
                     QTY11 = st.text_input('QTY11:')
                     QTY12 = st.text_input('QTY12:')
@@ -500,6 +515,11 @@ else:
                     QTY18 = st.text_input('QTY18:')
                     QTY19 = st.text_input('QTY19:')
                     QTY20 = st.text_input('QTY20:')
+                    QTY21 = st.text_input('QTY21:')
+                    QTY22 = st.text_input('QTY22:')
+                    QTY23 = st.text_input('QTY23:')
+                    QTY24 = st.text_input('QTY24:')
+                    QTY25 = st.text_input('QTY25:')
                 
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
