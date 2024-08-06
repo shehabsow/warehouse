@@ -408,30 +408,21 @@ else:
                             FINISHED GOODS BIN LOCATION SHEET
                         </h2>
                     """, unsafe_allow_html=True)
-                col1, col2, col3, col4, col5, col6 = st.columns([3, 2, 1.5, 1.5, 1.5, 1.5])
+                col1, col2= st.columns([3, 3])
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]  
                     st.markdown(f"<div style='font-size: 20px; color: red;'>Item Code: {Item_Code}</div>", unsafe_allow_html=True)
-                with col2:
-                    Batch_Number = st.text_input('Batch Number:')
-                    Date = st.date_input('Date:')
-                with col3:
-                    Warehouse_Operator = st.text_input('Warehouse Operator:')
-                with col4:
-                    
                     Quantity = st.text_input('QTY pack:', key='Quantity', on_change=on_quantity)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
-                with col5:
+                with col2:
+                    Batch_Number = st.text_input('Batch Number:')
+                    Date = st.date_input('Date:')
                     BIN1 = st.text_input('BIN1:')
                     QTY1 = st.text_input('QTY1:')
-                with col6:
-                    BIN2 = st.text_input('BIN2:')
-                    QTY2 = st.text_input('QTY2:')
-                    BIN3 = st.text_input('BIN3:')
-                    QTY3 = st.text_input('QTY3:')
+           
     
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
