@@ -423,7 +423,7 @@ else:
                     
 
                 with col3:
-                    st.session_state.df = df_Receving = pd.read_csv('Receving.csv')
+                    st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
@@ -431,9 +431,9 @@ else:
                 
                 def search_in_datafram(df_Receving, keyword, option):
                     if option == 'All Columns':
-                        result = df_Receving[df_Receving.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
                     else:
-                        result = df_Receving[df_Receving[option].astype(str).str.contains(keyword, case=False)]
+                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
                     return result
                 
                 if st.session_state.get('refreshed', False):
