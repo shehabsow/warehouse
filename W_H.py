@@ -422,11 +422,11 @@ else:
                     Date = st.date_input('Date:')
                     
 
-                 with col3:
-                     search_keyword = st.session_state.get('search_keyword', '')
-                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
-                     search_button = st.button("Search")
-                     search_option = 'All Columns'
+                with col3:
+                    search_keyword = st.session_state.get('search_keyword', '')
+                    search_keyword = st.text_input("Enter keyword to search:", search_keyword)
+                    search_button = st.button("Search")
+                     earch_option = 'All Columns'
                 
                 def search_in_dataframe(df_f, keyword, option):
                     if option == 'All Columns':
