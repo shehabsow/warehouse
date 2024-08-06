@@ -16,7 +16,7 @@ st.set_page_config(
 
 egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
-df_BIN = pd.read_csv('LOCATION.csv')
+df_BIN = pd.read_csv('LOCATION (1).csv')
 df_Receving = pd.read_csv('Receving.csv')
 
 # Load users data
@@ -322,7 +322,7 @@ else:
         if 'df' not in st.session_state:
             st.session_state.df = df_Material = pd.read_csv('matril.csv')
         try:
-            df_BIN = pd.read_csv('LOCATION.csv')
+            df_BIN = pd.read_csv('LOCATION (1).csv')
         except FileNotFoundError:
             df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number',"bins", "quantities", 
                                             'Quantity', 'Date'])
@@ -487,7 +487,7 @@ else:
                 
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
-                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION.csv', mime='text/csv')
+                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
             
         
             if __name__ == '__main__':
