@@ -446,8 +446,8 @@ else:
                     st.dataframe(search_results, width=1000, height=200)
                 st.session_state.refreshed = True 
 
-                 BIN1 = st.text_input('BIN1:')
-                 QTY1 = st.text_input('QTY1:')   
+                BIN1 = st.text_input('BIN1:')
+                QTY1 = st.text_input('QTY1:')   
                
     
                 if st.button("Add Location"):
