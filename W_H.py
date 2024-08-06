@@ -423,28 +423,28 @@ else:
                     
 
                 with col4:
-                    def search_in_datafram(df_BIN, keyword, option):
-                        if option == 'All Columns':
-                            result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
-                        else:
-                            result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
-                        return result
-                    df_BIN = pd.read_csv('LOCATION.csv')
-                    if 'df' not in st.session_state:
-                        st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
+                    st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
                     search_option = 'All Columns'
-                    if st.session_state.get('refreshed', False):
-                        st.session_state.search_keyword = ''
-                        st.session_state.refreshed = False
+                
+                def search_in_dataframe(df_BIN, keyword, option):
+                    if option == 'All Columns':
+                        result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                    else:
+                        result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
+                    return result
+                
+                if st.session_state.get('refreshed', False):
+                    st.session_state.search_keyword = ''
+                    st.session_state.refreshed = False
+                
                 if search_button and search_keyword:
                     st.session_state.search_keyword = search_keyword
-                    search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
+                    search_results = search_in_dataframe(st.session_state.df, search_keyword, search_option)
                     st.write(f"Search results for '{search_keyword}' in {search_option}:")
                     st.dataframe(search_results, width=1000, height=200)
-                    st.session_state.refreshed = True
                     csv = search_results.to_csv(index=False).encode('utf-8')
                     st.download_button(
                         label="Download results as CSV",
@@ -452,10 +452,8 @@ else:
                         file_name='search_results.csv',
                         mime='text/csv'
                     )
-                else:
-                    st.session_state.refreshed = True 
-                    
-
+                st.session_state.refreshed = True
+        
                 col1, col2,col3= st.columns([1,1,1])
                 with col1:
                     BIN1 = st.text_input('BIN1:')
