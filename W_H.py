@@ -408,7 +408,7 @@ else:
                             FINISHED GOODS BIN LOCATION SHEET
                         </h2>
                     """, unsafe_allow_html=True)
-                col1, col2,col3= st.columns([.75,.5,.5])
+                col1, col2,col3= st.columns([1,1,.5])
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]  
