@@ -18,7 +18,7 @@ egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
 df_BIN = pd.read_csv('LOCATION.csv')
 df_Receving = pd.read_csv('Receving.csv')
-df_combined = pd.concat([df_BIN, df_Receving], ignore_index=True)
+
 # Load users data
 def load_users():
     try:
@@ -429,38 +429,22 @@ else:
                         else:
                             result = df[df[option].astype(str).str.contains(keyword, case=False)]
                         return result
-                    
-                    # تحميل بيانات من ملفات CSV
                     df_BIN = pd.read_csv('LOCATION.csv')
-                    df_Receving = pd.read_csv('Receving.csv')
-                    
-                    # دمج البيانات في DataFrame واحد
-                    df_combined = pd.concat([df_BIN, df_Receving], ignore_index=True)
-                    
-                    # محاكاة جلسة Streamlit
                     if 'df' not in st.session_state:
-                        st.session_state.df = df_combined
-                    
-                    # إدخال من المستخدم
+                        st.session_state.df = df_BIN
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
                     search_option = 'All Columns'
-                    
-                    # التحقق من تحديث الجلسة
                     if st.session_state.get('refreshed', False):
                         st.session_state.search_keyword = ''
                         st.session_state.refreshed = False
-                    
-                    # تنفيذ البحث وعرض النتائج
                 if search_button and search_keyword:
                     st.session_state.search_keyword = search_keyword
                     search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
                     st.write(f"Search results for '{search_keyword}' in {search_option}:")
                     st.dataframe(search_results, width=1000, height=200)
                     st.session_state.refreshed = True
-                
-                    # إضافة زر لتحميل نتائج البحث كملف CSV
                     csv = search_results.to_csv(index=False).encode('utf-8')
                     st.download_button(
                         label="Download results as CSV",
@@ -470,8 +454,9 @@ else:
                     )
                 else:
                     st.session_state.refreshed = True 
+                    
 
-                col1, col2,col3= st.columns([.75,.5,.5])
+                col1, col2,col3= st.columns([1,1,1])
                 with col1:
                     BIN1 = st.text_input('BIN1:')
                     QTY1 = st.text_input('QTY1:')   
