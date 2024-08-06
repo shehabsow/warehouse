@@ -423,15 +423,15 @@ else:
                     
 
                 with col4:
-                    def search_in_datafram(df, keyword, option):
+                    def search_in_datafram(df_BIN, keyword, option):
                         if option == 'All Columns':
-                            result = df[df.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                            result = df_BIN[df_BIN.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
                         else:
-                            result = df[df[option].astype(str).str.contains(keyword, case=False)]
+                            result = df_BIN[df_BIN[option].astype(str).str.contains(keyword, case=False)]
                         return result
                     df_BIN = pd.read_csv('LOCATION.csv')
                     if 'df' not in st.session_state:
-                        st.session_state.df = df_BIN
+                        st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
