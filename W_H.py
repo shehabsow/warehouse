@@ -420,9 +420,35 @@ else:
                 with col2:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
-                    BIN1 = st.text_input('BIN1:')
-                    QTY1 = st.text_input('QTY1:')
-           
+                    
+
+                 with col3:
+                    search_keyword = st.session_state.get('search_keyword', '')
+                    search_keyword = st.text_input("Enter keyword to search:", search_keyword)
+                    search_button = st.button("Search")
+                    search_option = 'All Columns'
+                
+                def search_in_dataframe(df_f, keyword, option):
+                    if option == 'All Columns':
+                        result = df_f[df_f.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
+                    else:
+                        result = df_f[df_f[option].astype(str).str.contains(keyword, case=False)]
+                    return result
+                
+                if st.session_state.get('refreshed', False):
+                    st.session_state.search_keyword = ''
+                    st.session_state.refreshed = False
+                
+                if search_button and search_keyword:
+                    st.session_state.search_keyword = search_keyword
+                    search_results = search_in_dataframe(st.session_state.df, search_keyword, search_option)
+                    st.write(f"Search results for '{search_keyword}' in {search_option}:")
+                    st.dataframe(search_results, width=1000, height=200)
+                st.session_state.refreshed = True 
+
+                 BIN1 = st.text_input('BIN1:')
+                 QTY1 = st.text_input('QTY1:')   
+               
     
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
