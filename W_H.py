@@ -445,7 +445,13 @@ else:
                     search_results = search_in_datafram(st.session_state.df, search_keyword, search_option)
                     st.write(f"Search results for '{search_keyword}' in {search_option}:")
                     st.dataframe(search_results, width=1000, height=200)
-                st.session_state.refreshed = True 
+                    csv = search_results.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="Download results as CSV",
+                        data=csv,
+                        file_name='search_results.csv',
+                        mime='text/csv'
+                                st.session_state.refreshed = True 
 
                 col1, col2,col3= st.columns([.75,.5,.5])
                 with col1:
