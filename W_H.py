@@ -18,7 +18,7 @@ egypt_tz = pytz.timezone('Africa/Cairo')
 df_Material = pd.read_csv('matril.csv')
 df_BIN = pd.read_csv('LOCATION.csv')
 df_Receving = pd.read_csv('Receving.csv')
-
+df_combined = pd.concat([df_BIN, df_Receving], ignore_index=True)
 # Load users data
 def load_users():
     try:
@@ -423,7 +423,7 @@ else:
                     
 
                 with col3:
-                    st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
+                    st.session_state.df = df_combined
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
