@@ -408,7 +408,7 @@ else:
                             FINISHED GOODS BIN LOCATION SHEET
                         </h2>
                     """, unsafe_allow_html=True)
-                col1, col2,col3= st.columns([1,0.5,0.5])
+                col1, col2,col3,col4= st.columns([1,0.5,0.5,0.5])
                 with col1:
                     Product_Name = st.selectbox('Product Name', df_Material['Material Description'].dropna().values)
                     Item_Code = df_Material[df_Material['Material Description'] == Product_Name]['Material'].values[0]  
@@ -417,12 +417,12 @@ else:
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Pallets: {st.session_state.get('pallets', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Cartons: {st.session_state.get('cartons_left', '')}</div>", unsafe_allow_html=True)
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
-                with col2:
+                with col3:
                     Batch_Number = st.text_input('Batch Number:')
                     Date = st.date_input('Date:')
                     
 
-                with col3:
+                with col4:
                     def search_in_datafram(df, keyword, option):
                         if option == 'All Columns':
                             result = df[df.apply(lambda row: row.astype(str).str.contains(keyword, case=False).any(), axis=1)]
