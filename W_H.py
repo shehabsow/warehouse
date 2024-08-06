@@ -454,7 +454,7 @@ else:
                     )
                 st.session_state.refreshed = True
         
-                col1, col2,col3= st.columns([1,1,1])
+                col1, col2,col3,col3= st.columns([1,1,1,1])
                 with col1:
                     BIN1 = st.text_input('BIN1:')
                     BIN2 = st.text_input('BIN2:')
@@ -477,6 +477,29 @@ else:
                     QTY8 = st.text_input('QTY8:')
                     QTY9 = st.text_input('QTY9:')
                     QTY10 = st.text_input('QTY10:')
+
+                with col3:
+                    BIN11 = st.text_input('BIN11:')
+                    BIN12 = st.text_input('BIN12:')
+                    BIN13 = st.text_input('BIN13:')
+                    BIN14 = st.text_input('BIN14:')
+                    BIN15 = st.text_input('BIN15:')
+                    BIN16 = st.text_input('BIN16:')
+                    BIN17 = st.text_input('BIN17:')
+                    BIN18 = st.text_input('BIN18:')
+                    BIN19 = st.text_input('BIN19:')
+                    BIN20 = st.text_input('BIN20:')
+                with col4:
+                    QTY11 = st.text_input('QTY11:')
+                    QTY12 = st.text_input('QTY12:')
+                    QTY13 = st.text_input('QTY13:')
+                    QTY14 = st.text_input('QTY14:')
+                    QTY15 = st.text_input('QTY15:')
+                    QTY16 = st.text_input('QTY16:')
+                    QTY17 = st.text_input('QTY17:')
+                    QTY18 = st.text_input('QTY18:')
+                    QTY19 = st.text_input('QTY19:')
+                    QTY20 = st.text_input('QTY20:')
                 
                 if st.button("Add Location"):
                     add_new_LOCATION(Product_Name, Item_Code, Batch_Number, Warehouse_Operator, Quantity, Date, BIN1, QTY1, BIN2, QTY2, BIN3, QTY3, st.session_state.username)
