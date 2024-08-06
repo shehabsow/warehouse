@@ -450,8 +450,8 @@ else:
                         label="Download results as CSV",
                         data=csv,
                         file_name='search_results.csv',
-                        mime='text/csv'
-                                st.session_state.refreshed = True 
+                        mime='text/csv')
+                st.session_state.refreshed = True 
 
                 col1, col2,col3= st.columns([.75,.5,.5])
                 with col1:
