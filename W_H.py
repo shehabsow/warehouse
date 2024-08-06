@@ -419,7 +419,7 @@ else:
                     
 
                 with col4:
-                    st.session_state.df = df_BIN = pd.read_csv('LOCATION.csv')
+                    st.session_state.df = df_BIN = pd.read_csv('LOCATION (1).csv')
                     search_keyword = st.session_state.get('search_keyword', '')
                     search_keyword = st.text_input("Enter keyword to search:", search_keyword)
                     search_button = st.button("Search")
