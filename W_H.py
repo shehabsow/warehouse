@@ -324,8 +324,8 @@ else:
         try:
             df_BIN = pd.read_csv('LOCATION.csv')
         except FileNotFoundError:
-            df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number', "Warehouse Operator",
-                                            'Quantity', 'Date', 'BIN1', 'QTY1', 'BIN2', 'QTY2', 'BIN3', 'QTY3'])
+            df_BIN = pd.DataFrame(columns=['Product Name', 'Item Code', 'Batch Number',"bins", "quantities", 
+                                            'Quantity', 'Date'])
         
         try:
             df_Receving = pd.read_csv('Receving.csv')
