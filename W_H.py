@@ -477,7 +477,7 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
             
                 if st.button("Add Location"):
-                    new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                    new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                     st.write('## Updated Items')
                     st.write(new_data)
                     
@@ -491,9 +491,9 @@ else:
                     # عرض الداتا فريم المحدثة
                     st.dataframe(df_BIN)
                     
-                    # تحديث csv للداتا فريم المحدثة
-                    csv = df_BIN.to_csv(index=False)
-                    st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
+                st.dataframe(df_BIN)    # تحديث csv للداتا فريم المحدثة
+                csv = df_BIN.to_csv(index=False)
+                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
             
         
             if __name__ == '__main__':
