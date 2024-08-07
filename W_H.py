@@ -473,17 +473,26 @@ else:
                 st.write("## Current Entries")
                 for bin_value, qty_value in zip(st.session_state.bins, st.session_state.quantities):
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
-
+            
                 if st.button("Add Location"):
-                    new_row=add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
-                    df_BIN = df_BIN.append(new_row, ignore_index=True)
-                    df_BIN.to_csv('LOCATION (1).csv', index=False)
-                    st.write('## Updated Items')
-                    st.dataframe(df_BIN)
-                    
-                    # إضافة البيانات الجديدة إلى df_BIN
-                st.dataframe(df_BIN)
-                csv = df_BIN.to_csv(index=False)
+                    if not quantity:
+                        st.error("The quantity must be a valid integer.")
+                    else:
+                        new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                        st.write('## Updated Items')
+                        
+                        # إضافة البيانات الجديدة إلى df_BIN
+                        st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
+                        st.dataframe(st.session_state.df)
+                        
+                        # إعادة تعيين القيم
+                        st.session_state.bins = []
+                        st.session_state.quantities = []
+            
+                st.dataframe(st.session_state.df)
+            
+                # تحديث csv للداتا فريم المحدثة
+                csv = st.session_state.df.to_csv(index=False)
                 st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
 
         
