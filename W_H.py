@@ -321,6 +321,11 @@ else:
 
         if 'df' not in st.session_state:
             st.session_state.df = df_Material = pd.read_csv('matril.csv')
+
+        if 'bins' not in st.session_state:
+            st.session_state.bins = []
+        if 'quantities' not in st.session_state:
+            st.session_state.quantities = []
         try:
             df_BIN = pd.read_csv('LOCATION (1).csv')
         except FileNotFoundError:
@@ -449,14 +454,8 @@ else:
                         mime='text/csv'
                     )
                 st.session_state.refreshed = True
-        
-                col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
-    
-    # قوائم لتخزين قيم BINS و QTYs المدخلة
-                bins = []
-                quantities = []
-            
-                # قائمة BINS المتاحة (يمكنك تعديل هذه القائمة بما يناسبك)
+
+    # قائمة BINS المتاحة (يمكنك تعديل هذه القائمة بما يناسبك)
                 available_bins = ['BIN1', 'BIN2', 'BIN3', 'BIN4', 'BIN5', 'BIN6', 'BIN7', 'BIN8', 'BIN9', 'BIN10',
                                   'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
             
@@ -464,16 +463,27 @@ else:
                 col1, col2 = st.columns([1, 1])
                 with col1:
                     bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
-                    if bin_value:
-                        bins.append(bin_value)
                 with col2:
                     qty_value = st.text_input('QTY:', key='qty')
-                    if qty_value:
-                        quantities.append(qty_value)
+            
+                if st.button("Add BIN and QTY"):
+                    if bin_value and qty_value:
+                        st.session_state.bins.append(bin_value)
+                        st.session_state.quantities.append(qty_value)
+                        st.success(f"Added BIN: {bin_value}, QTY: {qty_value}")
+            
+                st.write("## Current Entries")
+                for bin_value, qty_value in zip(st.session_state.bins, st.session_state.quantities):
+                    st.write(f"BIN: {bin_value}, QTY: {qty_value}")
             
                 if st.button("Add Location"):
-                    add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
+                    new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                     st.write('## Updated Items')
+                    st.write(new_data)
+                    
+                    # Reset session state lists after adding location
+                    st.session_state.bins = []
+                    st.session_state.quantities = []
                             
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
