@@ -461,16 +461,15 @@ else:
                                   'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
             
                 # إدخال القيم في الأعمدة
-                for i in range(1, 21):
-                    col1, col2 = st.columns([1, 1])
-                    with col1:
-                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins, key=f'bin_{i}')
-                        if bin_value:
-                            bins.append(bin_value)
-                    with col2:
-                        qty_value = st.text_input(f'QTY{i}:', key=f'qty_{i}')
-                        if qty_value:
-                            quantities.append(qty_value)
+                col1, col2 = st.columns([1, 1])
+                with col1:
+                    bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
+                    if bin_value:
+                        bins.append(bin_value)
+                with col2:
+                    qty_value = st.text_input('QTY:', key='qty')
+                    if qty_value:
+                        quantities.append(qty_value)
             
                 if st.button("Add Location"):
                     add_new_location(product_name, item_code, batch_number, quantity, date, bins, quantities, st.session_state.username)
