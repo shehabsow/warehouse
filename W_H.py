@@ -463,6 +463,7 @@ else:
                     bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
                 with col2:
                     qty_value = st.text_input('QTY:', key='qty')
+                    st.button("run"):
             
                 if st.button("Add BIN and QTY"):
                     if bin_value and qty_value:
@@ -490,8 +491,6 @@ else:
                         st.session_state.quantities = []
             
                 st.dataframe(st.session_state.df)
-            
-                # تحديث csv للداتا فريم المحدثة
                 csv = st.session_state.df.to_csv(index=False)
                 st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
 
