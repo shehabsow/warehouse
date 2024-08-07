@@ -464,20 +464,20 @@ else:
                 with col2:
                     qty_value = st.text_input('QTY:', key='qty')
                     if st.button("Add Location"):
-                    if not Quantity:
-                        st.error("The quantity must be a valid integer.")
-                    else:
-                        new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
-                        st.write('## Updated Items')
-                        
-                        # إضافة البيانات الجديدة إلى df_BIN
-                        st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
-                        st.dataframe(st.session_state.df)
-                        
-                        # إعادة تعيين القيم
-                        st.session_state.bins = []
-                        st.session_state.quantities = []
-                    st.button("run")
+                        if not Quantity:
+                            st.error("The quantity must be a valid integer.")
+                        else:
+                            new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                            st.write('## Updated Items')
+                            
+                            # إضافة البيانات الجديدة إلى df_BIN
+                            st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
+                            st.dataframe(st.session_state.df)
+                            
+                            # إعادة تعيين القيم
+                            st.session_state.bins = []
+                            st.session_state.quantities = []
+                    
             
                 if st.button("Add BIN and QTY"):
                     if bin_value and qty_value:
