@@ -481,7 +481,7 @@ else:
                     if not Quantity:
                         st.error("The quantity must be a valid integer.")
                     else:
-                        new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date,, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                        new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                         st.write('## Updated Items')
                         
                         # إضافة البيانات الجديدة إلى df_BIN
