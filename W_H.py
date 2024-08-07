@@ -483,13 +483,6 @@ else:
                      else:
                          new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                          st.write('## Updated Items')
-                      
-                         df_BIN = df_BIN.append(new_data, ignore_index=True)
-              
-                         st.session_state.bins = []
-                         st.session_state.quantities = []
-                    
-                    # عرض الداتا فريم المحدثة
                          st.dataframe(df_BIN)
                     
                 st.dataframe(df_BIN)    # تحديث csv للداتا فريم المحدثة
