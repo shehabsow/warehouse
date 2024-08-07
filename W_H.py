@@ -484,6 +484,7 @@ else:
                     # Reset session state lists after adding location
                     st.session_state.bins = []
                     st.session_state.quantities = []
+                    st.dataframe(df_BIN)
                             
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
