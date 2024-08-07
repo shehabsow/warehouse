@@ -475,9 +475,11 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
 
                 if st.button("Add Location"):
-                    e=add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                    new_row=add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                    df_BIN = df_BIN.append(new_row, ignore_index=True)
+                    df_BIN.to_csv('LOCATION (1).csv', index=False)
                     st.write('## Updated Items')
-                    st.dataframe(e)
+                    st.dataframe(df_BIN)
                     
                     # إضافة البيانات الجديدة إلى df_BIN
                 st.dataframe(df_BIN)
