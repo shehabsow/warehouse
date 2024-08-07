@@ -322,6 +322,9 @@ else:
         if 'df' not in st.session_state:
             st.session_state.df = df_Material = pd.read_csv('matril.csv')
 
+        if 'df' not in st.session_state:
+            st.session_state.df = pd.read_csv('LOCATION (1).csv')
+
         if 'bins' not in st.session_state:
             st.session_state.bins = []
         if 'quantities' not in st.session_state:
@@ -453,6 +456,8 @@ else:
                         file_name='search_results.csv',
                         mime='text/csv'
                     )
+
+                st.session_state.df = pd.read_csv('LOCATION (1).csv')
                 available_bins = ['BIN1', 'BIN2', 'BIN3', 'BIN4', 'BIN5', 'BIN6', 'BIN7', 'BIN8', 'BIN9', 'BIN10',
                       'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
 
