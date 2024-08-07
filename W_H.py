@@ -463,7 +463,7 @@ else:
                     bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
                 with col2:
                     qty_value = st.text_input('QTY:', key='qty')
-                    st.button("run"):
+                    st.button("run")
             
                 if st.button("Add BIN and QTY"):
                     if bin_value and qty_value:
