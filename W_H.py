@@ -456,10 +456,14 @@ else:
                 bins = []
                 quantities = []
             
+                # قائمة BINS المتاحة (يمكنك تعديل هذه القائمة بما يناسبك)
+                available_bins = ['BIN1', 'BIN2', 'BIN3', 'BIN4', 'BIN5', 'BIN6', 'BIN7', 'BIN8', 'BIN9', 'BIN10',
+                                  'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
+            
                 # إدخال القيم في الأعمدة
                 with col1:
                     for i in range(1, 11):
-                        bin_value = st.text_input(f'BIN{i}:')
+                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins)
                         if bin_value:
                             bins.append(bin_value)
                 with col2:
@@ -467,23 +471,22 @@ else:
                         qty_value = st.text_input(f'QTY{i}:')
                         if qty_value:
                             quantities.append(qty_value)
-
+            
                 with col3:
                     for i in range(11, 21):
-                        bin_value = st.text_input(f'BIN{i}:')
+                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins)
                         if bin_value:
                             bins.append(bin_value)
-
+            
                 with col4:
                     for i in range(11, 21):
                         qty_value = st.text_input(f'QTY{i}:')
                         if qty_value:
                             quantities.append(qty_value)
-
-                
-                if st.button("Add Location"):
-                    add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
-                    st.write('## Updated Items')
+                            
+                            if st.button("Add Location"):
+                                add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
+                                st.write('## Updated Items')
                 
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
