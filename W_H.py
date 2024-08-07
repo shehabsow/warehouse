@@ -458,7 +458,7 @@ else:
                 available_bins = ['BIN1', 'BIN2', 'BIN3', 'BIN4', 'BIN5', 'BIN6', 'BIN7', 'BIN8', 'BIN9', 'BIN10',
                       'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
 
-                col1, col2 = st.columns([1, 1])
+                col1, col2 , col3= st.columns([1, 1,2])
                 with col1:
                     bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
                 with col2:
