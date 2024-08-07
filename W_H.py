@@ -494,7 +494,6 @@ else:
                     # تحديث csv للداتا فريم المحدثة
                     csv = df_BIN.to_csv(index=False)
                     st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
-            )
             
         
             if __name__ == '__main__':
