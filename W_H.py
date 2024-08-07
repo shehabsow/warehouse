@@ -489,9 +489,7 @@ else:
                         st.dataframe(st.session_state.df)
                         
                         # إعادة تعيين القيم
-                        st.session_state.bins = []
-                        st.session_state.quantities = []
-            
+                      
                 st.dataframe(st.session_state.df)
             
                 # تحديث csv للداتا فريم المحدثة
