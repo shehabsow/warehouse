@@ -483,7 +483,7 @@ else:
                      else:
                          new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                          st.write('## Updated Items')
-                         st.dataframe(df_BIN)
+                         st.dataframe(new_data)
                     
                 st.dataframe(df_BIN)    # تحديث csv للداتا فريم المحدثة
                 csv = df_BIN.to_csv(index=False)
