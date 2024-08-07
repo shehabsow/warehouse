@@ -475,8 +475,9 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
 
                 if st.button("Add Location"):
-                    add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                    e=add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                     st.write('## Updated Items')
+                    st.dataframe(e)
                     
                     # إضافة البيانات الجديدة إلى df_BIN
                 st.dataframe(df_BIN)
