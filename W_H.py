@@ -461,33 +461,21 @@ else:
                                   'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
             
                 # إدخال القيم في الأعمدة
-                with col1:
-                    for i in range(1, 11):
-                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins)
+                for i in range(1, 21):
+                    col1, col2 = st.columns([1, 1])
+                    with col1:
+                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins, key=f'bin_{i}')
                         if bin_value:
                             bins.append(bin_value)
-                with col2:
-                    for i in range(1, 11):
-                        qty_value = st.text_input(f'QTY{i}:')
+                    with col2:
+                        qty_value = st.text_input(f'QTY{i}:', key=f'qty_{i}')
                         if qty_value:
                             quantities.append(qty_value)
             
-                with col3:
-                    for i in range(11, 21):
-                        bin_value = st.selectbox(f'Select BIN{i}:', available_bins)
-                        if bin_value:
-                            bins.append(bin_value)
-            
-                with col4:
-                    for i in range(11, 21):
-                        qty_value = st.text_input(f'QTY{i}:')
-                        if qty_value:
-                            quantities.append(qty_value)
+                if st.button("Add Location"):
+                    add_new_location(product_name, item_code, batch_number, quantity, date, bins, quantities, st.session_state.username)
+                    st.write('## Updated Items')
                             
-                            if st.button("Add Location"):
-                                add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
-                                st.write('## Updated Items')
-                
                 st.dataframe(df_BIN)
                 csv = df_BIN.to_csv(index=False)
                 st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
