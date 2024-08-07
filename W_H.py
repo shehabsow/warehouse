@@ -477,7 +477,7 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
             
                 if st.button("Add Location"):
-                    new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                    new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date,st.session_state.bins, st.session_state.quantities, st.session_state.username)
                     st.write('## Updated Items')
                     st.write(new_data)
                     
