@@ -472,7 +472,7 @@ else:
                         quantities.append(qty_value)
             
                 if st.button("Add Location"):
-                    add_new_location(product_name, item_code, batch_number, quantity, date, bins, quantities, st.session_state.username)
+                    add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, bins, quantities, st.session_state.username)
                     st.write('## Updated Items')
                             
                 st.dataframe(df_BIN)
