@@ -477,19 +477,24 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
             
                 if st.button("Add Location"):
-                     if not Quantity:
-                         st.error("The quantity must be a valid integer.")
+                    if not quantity:
+                        st.error("The quantity must be a valid integer.")
+                    else:
+                        new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                        st.write('## Updated Items')
+                        
+                        # إضافة البيانات الجديدة إلى df_BIN
+                        st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
+                        st.dataframe(st.session_state.df)
+                        
+                        # إعادة تعيين القيم
+                        st.session_state.bins = []
+                        st.session_state.quantities = []
+                        
+                        # تحديث csv للداتا فريم المحدثة
+                        csv = st.session_state.df.to_csv(index=False)
+                        st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
 
-                     else:
-                         new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
-                         st.write('## Updated Items')
-                         df_BIN = df_BIN.append(new_data, ignore_index=True)
-                         st.dataframe(df_BIN)
-                    
-                st.dataframe(df_BIN)    # تحديث csv للداتا فريم المحدثة
-                csv = df_BIN.to_csv(index=False)
-                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
-            
         
             if __name__ == '__main__':
                 main()
