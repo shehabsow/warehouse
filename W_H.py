@@ -453,13 +453,9 @@ else:
                         file_name='search_results.csv',
                         mime='text/csv'
                     )
-                st.session_state.refreshed = True
-
-    # قائمة BINS المتاحة (يمكنك تعديل هذه القائمة بما يناسبك)
                 available_bins = ['BIN1', 'BIN2', 'BIN3', 'BIN4', 'BIN5', 'BIN6', 'BIN7', 'BIN8', 'BIN9', 'BIN10',
-                                  'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
-            
-                # إدخال القيم في الأعمدة
+                      'BIN11', 'BIN12', 'BIN13', 'BIN14', 'BIN15', 'BIN16', 'BIN17', 'BIN18', 'BIN19', 'BIN20']
+
                 col1, col2 = st.columns([1, 1])
                 with col1:
                     bin_value = st.selectbox('Select BIN:', available_bins, key='bin')
@@ -477,10 +473,10 @@ else:
                     st.write(f"BIN: {bin_value}, QTY: {qty_value}")
             
                 if st.button("Add Location"):
-                    if not Quantity:
+                    if not quantity:
                         st.error("The quantity must be a valid integer.")
                     else:
-                        new_data = add_new_location(Product_Name, Item_Code, Batch_Number, Quantity, Date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                        new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
                         st.write('## Updated Items')
                         
                         # إضافة البيانات الجديدة إلى df_BIN
@@ -490,10 +486,12 @@ else:
                         # إعادة تعيين القيم
                         st.session_state.bins = []
                         st.session_state.quantities = []
-                        
-                        # تحديث csv للداتا فريم المحدثة
-                        csv = st.session_state.df.to_csv(index=False)
-                        st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
+            
+                st.dataframe(st.session_state.df)
+            
+                # تحديث csv للداتا فريم المحدثة
+                csv = st.session_state.df.to_csv(index=False)
+                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
 
         
             if __name__ == '__main__':
