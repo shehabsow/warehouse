@@ -483,23 +483,23 @@ else:
                 st.session_state.quantities.pop(i)
                 st.experimental_rerun()
 
-    if st.button("Add Location"):
-        if not quantity:
-            st.error("The quantity must be a valid integer.")
-        else:
-            new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
-            st.write('## Updated Items')
+                if st.button("Add Location"):
+                    if not quantity:
+                        st.error("The quantity must be a valid integer.")
+                    else:
+                        new_data = add_new_location(product_name, item_code, batch_number, quantity, date, st.session_state.bins, st.session_state.quantities, st.session_state.username)
+                        st.write('## Updated Items')
+                        
+                        # إضافة البيانات الجديدة إلى df_BIN
+                        st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
+                        st.session_state.bins = []
+                        st.session_state.quantities = []
             
-            # إضافة البيانات الجديدة إلى df_BIN
-            st.session_state.df = st.session_state.df.append(new_data, ignore_index=True)
-            st.session_state.bins = []
-            st.session_state.quantities = []
-
-    st.dataframe(st.session_state.df)
-
-    # تحديث csv للداتا فريم المحدثة
-    csv = st.session_state.df.to_csv(index=False)
-    st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
+                st.dataframe(st.session_state.df)
+            
+                # تحديث csv للداتا فريم المحدثة
+                csv = st.session_state.df.to_csv(index=False)
+                st.download_button(label="Download updated sheet", data=csv, file_name='LOCATION (1).csv', mime='text/csv')
 
         
             if __name__ == '__main__':
