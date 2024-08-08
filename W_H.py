@@ -201,6 +201,8 @@ def on_quantity_change():
         st.error("Please enter a valid number for QTY pack.")
 
 def display_batch_details_and_confirmation():
+    if 'logs_confirmation' not in st.session_state:
+    st.session_state.logs_confirmation = []
     st.header("Confirmed Batches")
     confirmed_file = 'confirmed_batches.csv'
     if os.path.exists(confirmed_file):
@@ -228,7 +230,7 @@ def display_batch_details_and_confirmation():
             file_name='rejected_batches.csv',
             mime='text/csv'
         )
-        
+
     if st.session_state.username == "karm":  # Replace "manager" with the actual username you want to give special access
         st.header("Confirm or Reject the Batch")
 
@@ -240,21 +242,19 @@ def display_batch_details_and_confirmation():
 
         col1, col2, col3 = st.columns([0.5, 0.5, 1])
         with col1:
-
             batch_number = st.selectbox("Select a batch number", df_Receving['Batch No'].unique())
             batch_df = df_Receving[df_Receving['Batch No'] == batch_number]
             
-    
+        with col2:
             if st.button("Confirm the batch"):
                 st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
-    
-                confirmed_file = 'confirmed_batches.csv'
+
                 if os.path.exists(confirmed_file):
                     df_confirmed = pd.read_csv(confirmed_file)
                     df_confirmed = pd.concat([df_confirmed, batch_df], ignore_index=True).drop_duplicates()
                 else:
                     df_confirmed = batch_df
-    
+
                 df_confirmed.to_csv(confirmed_file, index=False)
                 st.success(f"Batch number {batch_number} has been successfully confirmed!")
                 log_entry = {
@@ -266,17 +266,16 @@ def display_batch_details_and_confirmation():
                 st.session_state.logs_confirmation.append(log_entry)
                 logs_df = pd.DataFrame(st.session_state.logs_confirmation)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
-    
+
             if st.button("Reject the batch"):
                 st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightcoral', subset=['Batch No']))
-    
-                reject_file = 'reject_batches.csv'
+
                 if os.path.exists(reject_file):
                     df_reject = pd.read_csv(reject_file)
                     df_reject = pd.concat([df_reject, batch_df], ignore_index=True).drop_duplicates()
                 else:
                     df_reject = batch_df
-    
+
                 df_reject.to_csv(reject_file, index=False)
                 st.success(f"Batch number {batch_number} has been successfully rejected!")
                 log_entry = {
