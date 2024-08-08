@@ -420,7 +420,7 @@ else:
                     st.markdown(f"<div style='font-size: 20px; color: green;'>Boxes: {st.session_state.get('boxes_left', '')}</div>", unsafe_allow_html=True)
                 with col2:
                     Batch_Number = st.text_input('Batch Number:')
-                    st.write(    2)
+                   
                     Date = st.date_input('Date:')
                     
 
