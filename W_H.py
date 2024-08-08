@@ -240,9 +240,10 @@ def display_batch_details_and_confirmation():
 
         col1, col2 = st.columns([.5, .5])
         with col1:
+            st.dataframe(batch_df)
             batch_number = st.selectbox("Select a batch number", df_Receving['Batch No'].unique())
             batch_df = df_Receving[df_Receving['Batch No'] == batch_number]
-        st.dataframe(batch_df)
+        
     
             if st.button("Confirm the batch"):
                 st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
