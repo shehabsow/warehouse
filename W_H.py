@@ -242,7 +242,7 @@ def display_batch_details_and_confirmation():
         with col1:
             batch_number = st.selectbox("Select a batch number", df_Receving['Batch No'].unique())
             batch_df = df_Receving[df_Receving['Batch No'] == batch_number]
-            st.dataframe(batch_df)
+            
     
             if st.button("Confirm the batch"):
                 st.dataframe(batch_df.style.applymap(lambda x: 'background-color: lightgreen', subset=['Batch No']))
@@ -287,6 +287,8 @@ def display_batch_details_and_confirmation():
                 st.session_state.logs_confirmation.append(log_entry)
                 logs_df = pd.DataFrame(st.session_state.logs_confirmation)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
+
+        st.dataframe(batch_df)
         with col2:
 
             st.button("updated")
