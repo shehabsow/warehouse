@@ -480,8 +480,8 @@ else:
                     with col3:
                         if st.button(f"Remove {i}", key=f"remove_{i}"):
                             st.session_state.bins.pop(i)
-                st.session_state.quantities.pop(i)
-                st.experimental_rerun()
+                            st.session_state.quantities.pop(i)
+                            st.experimental_rerun()
 
                 if st.button("Add Location"):
                     if not quantity:
