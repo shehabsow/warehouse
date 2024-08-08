@@ -202,7 +202,7 @@ def on_quantity_change():
 
 def display_batch_details_and_confirmation():
     if 'logs_confirmation' not in st.session_state:
-    st.session_state.logs_confirmation = []
+        st.session_state.logs_confirmation = []
     st.header("Confirmed Batches")
     confirmed_file = 'confirmed_batches.csv'
     if os.path.exists(confirmed_file):
