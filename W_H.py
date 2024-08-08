@@ -238,7 +238,7 @@ def display_batch_details_and_confirmation():
             st.error("Batch file is not available.")
             return
 
-        col1, col2 = st.columns([.5, .5])
+        col1, col2 = st.columns([.2,.2])
         with col1:
             batch_number = st.selectbox("Select a batch number", df_Receving['Batch No'].unique())
             batch_df = df_Receving[df_Receving['Batch No'] == batch_number]
