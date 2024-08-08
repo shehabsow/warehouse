@@ -288,6 +288,9 @@ def display_batch_details_and_confirmation():
                 st.session_state.logs_confirmation.append(log_entry)
                 logs_df = pd.DataFrame(st.session_state.logs_confirmation)
                 logs_df.to_csv('logs_confirmation.csv', index=False)
+        with col1:
+
+            st.button("updated")
 
 
 
